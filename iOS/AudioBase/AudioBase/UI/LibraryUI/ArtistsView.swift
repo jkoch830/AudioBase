@@ -1,5 +1,5 @@
 //
-//  LibraryView.swift
+//  ArtistsView.swift
 //  AudioBase
 //
 //  Created by James Koch on 8/3/20.
@@ -8,14 +8,14 @@
 
 import SwiftUI
 
-struct LibraryView: View {
+struct ArtistsView: View {
     var body: some View {
-        Text("Library View")
+        Text("ArtistsView")
     }
 }
 
-struct LibraryView_Previews: PreviewProvider {
+struct ArtistsView_Previews: PreviewProvider {
     static var previews: some View {
-        LibraryView()
+        ArtistsView()
     }
 }

@@ -22,9 +22,9 @@ function promisifyCommand(command: ffmpeg.FfmpegCommand) {
  */
 export const urlToMP3 = functions.https.onRequest(async (request, response) => {
     const url = <string> request.query.url;
-    const name = <string> request.query.name
-    const tempFilePath = path.join(os.tmpdir(), name)
-    console.log(tempFilePath)
+    const title = <string> request.query.title;
+    const artist = <string> request.query.artist;
+    const tempFilePath = path.join(os.tmpdir(), title)
     let proc = ffmpeg(ytdl(url))
     .fromFormat('mp4')
     .toFormat('mp3')
@@ -32,9 +32,10 @@ export const urlToMP3 = functions.https.onRequest(async (request, response) => {
     .output(tempFilePath)
     try {
         await promisifyCommand(proc)
-        const meta = {contentType: 'audio/mpeg'}
-        await bucket.upload(tempFilePath, {destination: `downloads/${name}.mp3`, 
-                                           metadata: meta})
+        const custom = {'title': title, 'artist': artist}
+        const metadata = {contentType: 'audio/mpeg', metadata: custom}
+        await bucket.upload(tempFilePath, {destination: `downloads/${title}.mp3`, 
+                                           metadata: metadata})
         response.status(200).end()
     } catch {
         response.status(400).end()

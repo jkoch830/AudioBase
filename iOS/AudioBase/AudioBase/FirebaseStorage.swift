@@ -6,19 +6,7 @@
 //  Copyright © 2020 James Koch. All rights reserved.
 //
 
-import Foundation
 import FirebaseStorage
-
-func getDocumentsDirectory() -> URL {
-    let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-    let documentsDirectory = paths[0]
-    return documentsDirectory
-}
-
-func getAudioDirectory(audioFilename: String) -> URL {
-    let documentsURL: URL = getDocumentsDirectory()
-    return documentsURL.appendingPathComponent("audio/\(audioFilename)")
-}
 
 /// Downloads the file from the 'downloads/' directory within Cloud Storage
 /// - Parameter filename: The name of the MP3 file stored within the 'downloads/' directory within Cloud Storage
