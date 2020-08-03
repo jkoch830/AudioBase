@@ -24,14 +24,19 @@ export const urlToMP3 = functions.https.onRequest(async (request, response) => {
     const url = <string> request.query.url;
     const name = <string> request.query.name
     const tempFilePath = path.join(os.tmpdir(), name)
+    console.log(tempFilePath)
     let proc = ffmpeg(ytdl(url))
     .fromFormat('mp4')
     .toFormat('mp3')
     .setFfmpegPath(ffmpeg_static)            
     .output(tempFilePath)
-    await promisifyCommand(proc)
-    const meta = {contentType: 'audio/mpeg'}
-    const uploadResponse = await bucket.upload(tempFilePath, {metadata: meta})
-    console.log(uploadResponse.values)
-    response.status(200).end()
+    try {
+        await promisifyCommand(proc)
+        const meta = {contentType: 'audio/mpeg'}
+        await bucket.upload(tempFilePath, {destination: `downloads/${name}.mp3`, 
+                                           metadata: meta})
+        response.status(200).end()
+    } catch {
+        response.status(400).end()
+    }
 })

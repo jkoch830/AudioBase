@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -18,6 +18,11 @@
 		1A3EB19724D3D67A00070548 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1A3EB19624D3D67A00070548 /* GoogleService-Info.plist */; };
 		1A3EB19824D3D67A00070548 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1A3EB19624D3D67A00070548 /* GoogleService-Info.plist */; };
 		1A3EB19924D3D67A00070548 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1A3EB19624D3D67A00070548 /* GoogleService-Info.plist */; };
+		1A6F4AFE24D778BA00996AA4 /* FirebaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6F4AFD24D778BA00996AA4 /* FirebaseStorage.swift */; };
+		1A6F4B0124D85B8800996AA4 /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6F4B0024D85B8800996AA4 /* AudioPlayer.swift */; };
+		1A6F4B0324D8602500996AA4 /* MainTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6F4B0224D8602500996AA4 /* MainTabController.swift */; };
+		1A6F4B0624D860BC00996AA4 /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6F4B0524D860BC00996AA4 /* LibraryView.swift */; };
+		1A6F4B0824D860D400996AA4 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6F4B0724D860D400996AA4 /* SearchView.swift */; };
 		2BA2EFB0EDB4E03EFCD81971 /* Pods_AudioBase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08CA5548055555A6D22CA572 /* Pods_AudioBase.framework */; };
 		3D32A842B77E350E3AC5F29D /* Pods_AudioBaseTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F10D3ED6227DE7DF5288DAB /* Pods_AudioBaseTests.framework */; };
 		F520B1638B53C9BBA9717ADC /* Pods_AudioBase_AudioBaseUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 459F2BF908FA887E710AA972 /* Pods_AudioBase_AudioBaseUITests.framework */; };
@@ -57,6 +62,11 @@
 		1A3EB18824D3D5E400070548 /* AudioBaseUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioBaseUITests.swift; sourceTree = "<group>"; };
 		1A3EB18A24D3D5E400070548 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1A3EB19624D3D67A00070548 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		1A6F4AFD24D778BA00996AA4 /* FirebaseStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorage.swift; sourceTree = "<group>"; };
+		1A6F4B0024D85B8800996AA4 /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
+		1A6F4B0224D8602500996AA4 /* MainTabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabController.swift; sourceTree = "<group>"; };
+		1A6F4B0524D860BC00996AA4 /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
+		1A6F4B0724D860D400996AA4 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		3F10D3ED6227DE7DF5288DAB /* Pods_AudioBaseTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AudioBaseTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		459F2BF908FA887E710AA972 /* Pods_AudioBase_AudioBaseUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AudioBase_AudioBaseUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6328C77A3AA290738AE50A81 /* Pods-AudioBase-AudioBaseUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioBase-AudioBaseUITests.release.xcconfig"; path = "Target Support Files/Pods-AudioBase-AudioBaseUITests/Pods-AudioBase-AudioBaseUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -120,14 +130,14 @@
 		1A3EB16524D3D5DF00070548 /* AudioBase */ = {
 			isa = PBXGroup;
 			children = (
+				1A6F4B0424D8608C00996AA4 /* UI */,
 				1A3EB19624D3D67A00070548 /* GoogleService-Info.plist */,
-				1A3EB16624D3D5DF00070548 /* AppDelegate.swift */,
-				1A3EB16824D3D5DF00070548 /* SceneDelegate.swift */,
-				1A3EB16A24D3D5DF00070548 /* ContentView.swift */,
 				1A3EB16C24D3D5E300070548 /* Assets.xcassets */,
 				1A3EB17124D3D5E300070548 /* LaunchScreen.storyboard */,
 				1A3EB17424D3D5E300070548 /* Info.plist */,
 				1A3EB16E24D3D5E300070548 /* Preview Content */,
+				1A6F4AFD24D778BA00996AA4 /* FirebaseStorage.swift */,
+				1A6F4B0024D85B8800996AA4 /* AudioPlayer.swift */,
 			);
 			path = AudioBase;
 			sourceTree = "<group>";
@@ -158,6 +168,19 @@
 			path = AudioBaseUITests;
 			sourceTree = "<group>";
 		};
+		1A6F4B0424D8608C00996AA4 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				1A6F4B0224D8602500996AA4 /* MainTabController.swift */,
+				1A3EB16624D3D5DF00070548 /* AppDelegate.swift */,
+				1A3EB16824D3D5DF00070548 /* SceneDelegate.swift */,
+				1A3EB16A24D3D5DF00070548 /* ContentView.swift */,
+				1A6F4B0524D860BC00996AA4 /* LibraryView.swift */,
+				1A6F4B0724D860D400996AA4 /* SearchView.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
 		5F538D69C4EEA60E6A622A58 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -178,7 +201,6 @@
 				DB76BE81A9DB295EE8534B9E /* Pods-AudioBaseTests.debug.xcconfig */,
 				C7A77B0ED2722C3A19F8D655 /* Pods-AudioBaseTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -424,9 +446,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A6F4B0624D860BC00996AA4 /* LibraryView.swift in Sources */,
 				1A3EB16724D3D5DF00070548 /* AppDelegate.swift in Sources */,
 				1A3EB16924D3D5DF00070548 /* SceneDelegate.swift in Sources */,
+				1A6F4B0324D8602500996AA4 /* MainTabController.swift in Sources */,
+				1A6F4B0824D860D400996AA4 /* SearchView.swift in Sources */,
+				1A6F4AFE24D778BA00996AA4 /* FirebaseStorage.swift in Sources */,
 				1A3EB16B24D3D5DF00070548 /* ContentView.swift in Sources */,
+				1A6F4B0124D85B8800996AA4 /* AudioPlayer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
