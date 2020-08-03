@@ -13,26 +13,13 @@ struct PlaylistsView: View {
     var body: some View {
         VStack {
             Button(action: {
-                       downloadMP3FromStorage(filename: "testfile2.mp3")
+                fireNewMP3ToStorage(youtubeURL: "https://www.youtube.com/watch?v=djV11Xbc914", title: "newname", artist: "IZ")
                    }) {
                        Text("DOWNLOAD")
                    }
             Button(action: {
-                do {
-                    // Get the directory contents urls (including subfolders urls)
-                    let dir: URL = getDocumentsDirectory().appendingPathComponent("audio/")
-                    let directoryContents = try FileManager.default.contentsOfDirectory(at: dir, includingPropertiesForKeys: nil)
-                    print(directoryContents)
-
-                    // if you want to filter the directory contents you can do like this:
-                    let mp3Files = directoryContents.filter{ $0.pathExtension == "mp3" }
-                    print("mp3 urls:",mp3Files)
-                    let mp3FileNames = mp3Files.map{ $0.deletingPathExtension().lastPathComponent }
-                    print("mp3 list:", mp3FileNames)
-
-                } catch {
-                    print(error)
-                }
+                print(getAllMP3Files())
+                print(getDocumentsDirectory())
             }) {
                 Text("TEST")
             }

@@ -22,4 +22,19 @@ func getAudioDirectory(audioFilename: String) -> URL {
     return documentsURL.appendingPathComponent("audio/\(audioFilename)")
 }
 
+func getAllMP3Files() -> [String] {
+    do {
+        // Get the directory contents urls (including subfolders urls)
+        let dir: URL = getDocumentsDirectory().appendingPathComponent("audio/")
+        let directoryContents = try FileManager.default.contentsOfDirectory(at: dir, includingPropertiesForKeys: nil)
+        // if you want to filter the directory contents you can do like this:
+        let mp3Files = directoryContents.filter{ $0.pathExtension == "mp3" }
+        let mp3FileNames = mp3Files.map{ $0.deletingPathExtension().lastPathComponent }
+        return mp3FileNames
+    } catch {
+        print(error)
+        return []
+    }
+}
+
 

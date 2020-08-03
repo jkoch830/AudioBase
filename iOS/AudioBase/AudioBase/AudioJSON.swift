@@ -38,7 +38,7 @@ func verifyAudioFileExists() {
     }
 }
 
-func addAudioInfo(newAudioInfo: AudioInfo) {
+func addAudioInfo(_ newAudioInfo: AudioInfo) {
     verifyAudioFileExists()
     let url = getAudioFilesJSONURL()
     let encoder = JSONEncoder()
@@ -73,6 +73,24 @@ func getAudioInfo(title: String) -> AudioInfo? {
         print("error:\(error)")
         return nil
     }
+}
+
+func getAllAudioInfo() -> [String: AudioInfo] {
+    verifyAudioFileExists()
+    let url = getAudioFilesJSONURL()
+    do {
+        let data = try Data(contentsOf: url)
+        let decoder = JSONDecoder()
+        let jsonData = try decoder.decode([String: AudioInfo].self, from: data)
+        return jsonData
+    } catch {
+        print("error:\(error)")
+        return [String: AudioInfo]()
+    }
+}
+
+func getAllAudioInfoArray() -> [AudioInfo] {
+    return Array(getAllAudioInfo().values)
 }
 
 

@@ -16,5 +16,6 @@ struct Constants {
     static let SONGS_BUTTONS_WIDTH = Constants.DEVICE_WIDTH * 5 / 12
     static let SONGS_BUTTONS_HEIGHT = Constants.DEVICE_HEIGHT / 16
     static let SONGS_BUTTONS_CORNER_RADIUS = CGFloat(10)
+    static let SONG_ROW_HEIGHT = Constants.DEVICE_HEIGHT / 10
     
 }

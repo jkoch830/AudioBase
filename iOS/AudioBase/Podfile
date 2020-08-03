@@ -18,5 +18,6 @@ target 'AudioBase' do
 
   pod 'Firebase/Analytics'
   pod 'Firebase/Storage'
+  pod 'Alamofire'
 
 end

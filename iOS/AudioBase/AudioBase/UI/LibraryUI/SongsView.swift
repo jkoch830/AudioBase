@@ -55,10 +55,42 @@ struct PlayShuffleButtons: View {
     }
 }
 
-struct SongRow: View {
-    
+struct PlayerButtons: View {
+    @EnvironmentObject var audioPlayer: AudioPlayer
     var body: some View {
-        Text("SONG")
+        HStack {
+            Button(action: {
+                if self.audioPlayer.isPlaying {
+                    self.audioPlayer.pause()
+                } else {
+                    self.audioPlayer.resume()
+                }
+                
+            }) {
+                if self.audioPlayer.isPlaying {
+                    Image(systemName: "pause.fill")
+                    .resizable()
+                    .frame(width: 20, height: Constants.SONG_ROW_HEIGHT / 3)
+                } else {
+                    Image(systemName: "play.fill")
+                    .resizable()
+                    .frame(width: 20, height: Constants.SONG_ROW_HEIGHT / 3)
+                }
+            }
+        }.frame(width: Constants.DEVICE_WIDTH, height: Constants.SONG_ROW_HEIGHT)
+            .background(Color(UIColor.systemGray6))
+    }
+}
+
+struct SongRow: View {
+    let audioInfo: AudioInfo
+    @EnvironmentObject var audioPlayer: AudioPlayer
+    var body: some View {
+        Button(action: {
+            self.audioPlayer.play(filename: "\(self.audioInfo.title).mp3")
+        }) {
+            Text(self.audioInfo.title)
+        }
     }
 }
 
@@ -69,12 +101,16 @@ struct SongsView: View {
             // Play and shuffle button
             PlayShuffleButtons().padding(.top, 15)
             Divider()
+            
             // List of all songs
             List {
-                Button(action: {print("HAHA")}) {
-                    Text("TEST SONG")
+                ForEach(getAllAudioInfoArray(), id: \.self.title) {audioInfo in
+                    SongRow(audioInfo: audioInfo)
                 }
             }.navigationBarTitle("Songs")
+            
+            // Currently playing section
+            PlayerButtons()
         }
     }
 }

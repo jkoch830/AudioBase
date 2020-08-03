@@ -9,23 +9,40 @@
 import Foundation
 import AVFoundation
 
-var player: AVAudioPlayer!
+//var player: AVAudioPlayer!
 
-func startPlayer(filename: String) {
-    let localURL = getAudioDirectory(audioFilename: filename)
-    do {
-        player = try AVAudioPlayer(contentsOf: localURL)
-        player.prepareToPlay()
-        player.play()
-    } catch {
-        print(error)
+class AudioPlayer: ObservableObject {
+    private var player: AVAudioPlayer!
+    
+    @Published var isPlaying: Bool = false
+
+    func play(filename: String) {
+        let localURL = getAudioDirectory(audioFilename: filename)
+        do {
+            self.player = try AVAudioPlayer(contentsOf: localURL)
+            self.player.prepareToPlay()
+            self.player.play()
+            self.isPlaying = true
+        } catch {
+            print(error)
+        }
+    }
+
+    func pause() {
+        self.player?.pause()
+        self.isPlaying = false
+    }
+    
+    func resume() {
+        self.player.play()
+        self.isPlaying = true
+    }
+
+    func stop() {
+        self.player.stop()
+        self.isPlaying = false
     }
 }
 
-func pausePlayer() {
-    player.pause()
-}
 
-func stopPlayer() {
-    player.stop()
-}
+
