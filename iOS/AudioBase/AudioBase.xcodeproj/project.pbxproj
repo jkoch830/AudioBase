@@ -30,6 +30,7 @@
 		1A6F4B1324D877CF00996AA4 /* ColorHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6F4B1224D877CF00996AA4 /* ColorHolder.swift */; };
 		1A6F4B1524D88C9D00996AA4 /* AudioJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6F4B1424D88C9D00996AA4 /* AudioJSON.swift */; };
 		1A6F4B1724D892D300996AA4 /* FileDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6F4B1624D892D300996AA4 /* FileDirectory.swift */; };
+		1A6F4B1924D8DB2A00996AA4 /* YoutubeWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6F4B1824D8DB2A00996AA4 /* YoutubeWebView.swift */; };
 		2BA2EFB0EDB4E03EFCD81971 /* Pods_AudioBase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08CA5548055555A6D22CA572 /* Pods_AudioBase.framework */; };
 		3D32A842B77E350E3AC5F29D /* Pods_AudioBaseTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F10D3ED6227DE7DF5288DAB /* Pods_AudioBaseTests.framework */; };
 		F520B1638B53C9BBA9717ADC /* Pods_AudioBase_AudioBaseUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 459F2BF908FA887E710AA972 /* Pods_AudioBase_AudioBaseUITests.framework */; };
@@ -81,6 +82,7 @@
 		1A6F4B1224D877CF00996AA4 /* ColorHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorHolder.swift; sourceTree = "<group>"; };
 		1A6F4B1424D88C9D00996AA4 /* AudioJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioJSON.swift; sourceTree = "<group>"; };
 		1A6F4B1624D892D300996AA4 /* FileDirectory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileDirectory.swift; sourceTree = "<group>"; };
+		1A6F4B1824D8DB2A00996AA4 /* YoutubeWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubeWebView.swift; sourceTree = "<group>"; };
 		3F10D3ED6227DE7DF5288DAB /* Pods_AudioBaseTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AudioBaseTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		459F2BF908FA887E710AA972 /* Pods_AudioBase_AudioBaseUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AudioBase_AudioBaseUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6328C77A3AA290738AE50A81 /* Pods-AudioBase-AudioBaseUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioBase-AudioBaseUITests.release.xcconfig"; path = "Target Support Files/Pods-AudioBase-AudioBaseUITests/Pods-AudioBase-AudioBaseUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 				1A6F4B0724D860D400996AA4 /* SearchView.swift */,
 				1A6F4B1024D8741200996AA4 /* Constants.swift */,
 				1A6F4B1224D877CF00996AA4 /* ColorHolder.swift */,
+				1A6F4B1824D8DB2A00996AA4 /* YoutubeWebView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -480,6 +483,7 @@
 				1A3EB16724D3D5DF00070548 /* AppDelegate.swift in Sources */,
 				1A6F4B1724D892D300996AA4 /* FileDirectory.swift in Sources */,
 				1A6F4B0D24D8694600996AA4 /* SongsView.swift in Sources */,
+				1A6F4B1924D8DB2A00996AA4 /* YoutubeWebView.swift in Sources */,
 				1A3EB16924D3D5DF00070548 /* SceneDelegate.swift in Sources */,
 				1A6F4B0F24D8695100996AA4 /* ArtistsView.swift in Sources */,
 				1A6F4B0324D8602500996AA4 /* MainTabController.swift in Sources */,
