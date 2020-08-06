@@ -13,7 +13,7 @@ struct PlaylistsView: View {
     var body: some View {
         VStack {
             Button(action: {
-                fireNewMP3ToStorage(youtubeURL: "https://www.youtube.com/watch?v=djV11Xbc914", title: "newname", artist: "IZ")
+                tempFunction()
                    }) {
                        Text("DOWNLOAD")
                    }

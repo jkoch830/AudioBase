@@ -23,4 +23,12 @@ class ColorHolder: ObservableObject {
     func selectColor(color: Color) {
         self.selectedColor = color
     }
+    
+    func toggle() {
+        if selectedColor == CustomColors.CUSTOM_BLUE {
+            self.selectedColor = CustomColors.CUSTOM_PURPLE
+        } else {
+            self.selectedColor = CustomColors.CUSTOM_BLUE
+        }
+    }
 }

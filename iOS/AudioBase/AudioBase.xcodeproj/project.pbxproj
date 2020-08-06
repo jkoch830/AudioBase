@@ -31,6 +31,7 @@
 		1A6F4B1524D88C9D00996AA4 /* AudioJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6F4B1424D88C9D00996AA4 /* AudioJSON.swift */; };
 		1A6F4B1724D892D300996AA4 /* FileDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6F4B1624D892D300996AA4 /* FileDirectory.swift */; };
 		1A6F4B1924D8DB2A00996AA4 /* YoutubeWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6F4B1824D8DB2A00996AA4 /* YoutubeWebView.swift */; };
+		1A6F4B1C24D92E8D00996AA4 /* ScrollViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6F4B1B24D92E8D00996AA4 /* ScrollViewManager.swift */; };
 		2BA2EFB0EDB4E03EFCD81971 /* Pods_AudioBase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08CA5548055555A6D22CA572 /* Pods_AudioBase.framework */; };
 		3D32A842B77E350E3AC5F29D /* Pods_AudioBaseTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F10D3ED6227DE7DF5288DAB /* Pods_AudioBaseTests.framework */; };
 		F520B1638B53C9BBA9717ADC /* Pods_AudioBase_AudioBaseUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 459F2BF908FA887E710AA972 /* Pods_AudioBase_AudioBaseUITests.framework */; };
@@ -83,6 +84,7 @@
 		1A6F4B1424D88C9D00996AA4 /* AudioJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioJSON.swift; sourceTree = "<group>"; };
 		1A6F4B1624D892D300996AA4 /* FileDirectory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileDirectory.swift; sourceTree = "<group>"; };
 		1A6F4B1824D8DB2A00996AA4 /* YoutubeWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubeWebView.swift; sourceTree = "<group>"; };
+		1A6F4B1B24D92E8D00996AA4 /* ScrollViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewManager.swift; sourceTree = "<group>"; };
 		3F10D3ED6227DE7DF5288DAB /* Pods_AudioBaseTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AudioBaseTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		459F2BF908FA887E710AA972 /* Pods_AudioBase_AudioBaseUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AudioBase_AudioBaseUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6328C77A3AA290738AE50A81 /* Pods-AudioBase-AudioBaseUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioBase-AudioBaseUITests.release.xcconfig"; path = "Target Support Files/Pods-AudioBase-AudioBaseUITests/Pods-AudioBase-AudioBaseUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -146,16 +148,13 @@
 		1A3EB16524D3D5DF00070548 /* AudioBase */ = {
 			isa = PBXGroup;
 			children = (
+				1A6F4B1A24D8FC3F00996AA4 /* Audio */,
 				1A6F4B0424D8608C00996AA4 /* UI */,
 				1A3EB19624D3D67A00070548 /* GoogleService-Info.plist */,
 				1A3EB16C24D3D5E300070548 /* Assets.xcassets */,
 				1A3EB17124D3D5E300070548 /* LaunchScreen.storyboard */,
 				1A3EB17424D3D5E300070548 /* Info.plist */,
 				1A3EB16E24D3D5E300070548 /* Preview Content */,
-				1A6F4AFD24D778BA00996AA4 /* FirebaseInterface.swift */,
-				1A6F4B1424D88C9D00996AA4 /* AudioJSON.swift */,
-				1A6F4B0024D85B8800996AA4 /* AudioPlayer.swift */,
-				1A6F4B1624D892D300996AA4 /* FileDirectory.swift */,
 			);
 			path = AudioBase;
 			sourceTree = "<group>";
@@ -205,12 +204,24 @@
 		1A6F4B0B24D8693000996AA4 /* LibraryUI */ = {
 			isa = PBXGroup;
 			children = (
-				1A6F4B0924D868D100996AA4 /* PlaylistsView.swift */,
 				1A6F4B0524D860BC00996AA4 /* LibraryView.swift */,
+				1A6F4B0924D868D100996AA4 /* PlaylistsView.swift */,
 				1A6F4B0C24D8694600996AA4 /* SongsView.swift */,
 				1A6F4B0E24D8695100996AA4 /* ArtistsView.swift */,
+				1A6F4B1B24D92E8D00996AA4 /* ScrollViewManager.swift */,
 			);
 			path = LibraryUI;
+			sourceTree = "<group>";
+		};
+		1A6F4B1A24D8FC3F00996AA4 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				1A6F4AFD24D778BA00996AA4 /* FirebaseInterface.swift */,
+				1A6F4B1424D88C9D00996AA4 /* AudioJSON.swift */,
+				1A6F4B0024D85B8800996AA4 /* AudioPlayer.swift */,
+				1A6F4B1624D892D300996AA4 /* FileDirectory.swift */,
+			);
+			path = Audio;
 			sourceTree = "<group>";
 		};
 		5F538D69C4EEA60E6A622A58 /* Frameworks */ = {
@@ -481,6 +492,7 @@
 				1A6F4B0A24D868D100996AA4 /* PlaylistsView.swift in Sources */,
 				1A6F4B0624D860BC00996AA4 /* LibraryView.swift in Sources */,
 				1A3EB16724D3D5DF00070548 /* AppDelegate.swift in Sources */,
+				1A6F4B1C24D92E8D00996AA4 /* ScrollViewManager.swift in Sources */,
 				1A6F4B1724D892D300996AA4 /* FileDirectory.swift in Sources */,
 				1A6F4B0D24D8694600996AA4 /* SongsView.swift in Sources */,
 				1A6F4B1924D8DB2A00996AA4 /* YoutubeWebView.swift in Sources */,

@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import FirebaseStorage
 @testable import AudioBase
 
 class AudioBaseTests: XCTestCase {
@@ -20,6 +21,7 @@ class AudioBaseTests: XCTestCase {
     }
 
     func testJSON() throws {
+        print(getDocumentsDirectory())
         
     }
 

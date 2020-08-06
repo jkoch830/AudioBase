@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct PlayButton: View {
     @EnvironmentObject var colorHolder: ColorHolder
@@ -87,27 +88,51 @@ struct SongRow: View {
     @EnvironmentObject var audioPlayer: AudioPlayer
     var body: some View {
         Button(action: {
-            self.audioPlayer.play(filename: "\(self.audioInfo.title).mp3")
+            self.audioPlayer.play(songName: "\(self.audioInfo.title).mp3")
         }) {
-            Text(self.audioInfo.title)
+            VStack (alignment: .leading, spacing: 5) {
+                Text(self.audioInfo.title)
+                    .font(.system(size: Constants.SONG_TITLE_SIZE))
+                    .font(.title)
+                    .fontWeight(.light)
+                Text(self.audioInfo.artist)
+                    //.font(.footnote)
+                    .font(.system(size: Constants.SONG_ARTIST_SIZE))
+                    .foregroundColor(Color.gray)
+            }
         }
     }
 }
 
 struct SongsView: View {
+    @State var indexPathToSetVisible: IndexPath?
     var body: some View {
         // List of all songs
         VStack {
             // Play and shuffle button
             PlayShuffleButtons().padding(.top, 15)
             Divider()
+            //TableViewControllerWrapper()
             
             // List of all songs
             List {
                 ForEach(getAllAudioInfoArray(), id: \.self.title) {audioInfo in
                     SongRow(audioInfo: audioInfo)
                 }
-            }.navigationBarTitle("Songs")
+            }.overlay(
+                ScrollManagerView(indexPathToSetVisible: $indexPathToSetVisible)
+                    .allowsHitTesting(false).frame(width: 0, height: 0)
+            ).navigationBarTitle("Songs")
+            .navigationBarItems(
+            leading:
+                Button("Scroll to top") {
+                    self.indexPathToSetVisible = IndexPath(
+                        row: 0, section: 0
+                    )
+                },
+            trailing:
+                Button("Add") {
+            })
             
             // Currently playing section
             PlayerButtons()
@@ -115,8 +140,10 @@ struct SongsView: View {
     }
 }
 
+
+
 struct SongsView_Previews: PreviewProvider {
     static var previews: some View {
-        SongsView()
+        SongRow(audioInfo: AudioInfo(title: "I'm Yours", artist: "Jason Mraz", fileURL: URL(fileURLWithPath: ""))).environmentObject(AudioPlayer())
     }
 }

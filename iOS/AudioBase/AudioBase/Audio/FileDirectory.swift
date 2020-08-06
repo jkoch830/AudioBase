@@ -7,6 +7,12 @@
 //
 import Foundation
 
+func songNameToFilename(songName: String) -> String {
+    var formatted = songName.replacingOccurrences(of: "\'", with: ";")
+    formatted = formatted.replacingOccurrences(of: " ", with: "_")
+    return formatted
+}
+
 func getDocumentsDirectory() -> URL {
     let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
     let documentsDirectory = paths[0]
