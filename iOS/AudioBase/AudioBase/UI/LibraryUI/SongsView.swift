@@ -140,10 +140,3 @@ struct SongsView: View {
     }
 }
 
-
-
-struct SongsView_Previews: PreviewProvider {
-    static var previews: some View {
-        SongRow(audioInfo: AudioInfo(title: "I'm Yours", artist: "Jason Mraz", fileURL: URL(fileURLWithPath: ""))).environmentObject(AudioPlayer())
-    }
-}

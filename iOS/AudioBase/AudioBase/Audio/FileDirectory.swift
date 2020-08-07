@@ -8,7 +8,7 @@
 import Foundation
 
 func songNameToFilename(songName: String) -> String {
-    var formatted = songName.replacingOccurrences(of: "\'", with: ";")
+    var formatted = songName.replacingOccurrences(of: "\'", with: "-")
     formatted = formatted.replacingOccurrences(of: " ", with: "_")
     return formatted
 }

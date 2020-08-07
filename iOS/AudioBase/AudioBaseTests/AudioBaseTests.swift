@@ -21,7 +21,6 @@ class AudioBaseTests: XCTestCase {
     }
 
     func testJSON() throws {
-        print(getDocumentsDirectory())
         
     }
 

@@ -43,5 +43,10 @@ def download_and_convert():
                                      universal_newlines=True)
     blob = bucket.blob(f"downloads/{title}.mp3")
     blob.upload_from_filename(f"./tmp/{title}.mp3")
+    command = f"rm ./tmp/{title}.*"
+    delete_process = subprocess.run(command,
+                                    shell=True,
+                                    stdout=subprocess.PIPE,
+                                    universal_newlines=True)
     return "ok", HTTPStatus.OK
 

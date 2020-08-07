@@ -32,6 +32,10 @@
 		1A6F4B1724D892D300996AA4 /* FileDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6F4B1624D892D300996AA4 /* FileDirectory.swift */; };
 		1A6F4B1924D8DB2A00996AA4 /* YoutubeWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6F4B1824D8DB2A00996AA4 /* YoutubeWebView.swift */; };
 		1A6F4B1C24D92E8D00996AA4 /* ScrollViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6F4B1B24D92E8D00996AA4 /* ScrollViewManager.swift */; };
+		1AC4AF3124DCF1E60094D04A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC4AF3024DCF1E60094D04A /* SettingsView.swift */; };
+		1AC4AF3324DCF21B0094D04A /* DownloadsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC4AF3224DCF21B0094D04A /* DownloadsView.swift */; };
+		1AC4AF3524DCF6C70094D04A /* DownloadTaskContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC4AF3424DCF6C70094D04A /* DownloadTaskContainer.swift */; };
+		1AC4AF3724DCFA660094D04A /* DownloadTaskWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC4AF3624DCFA660094D04A /* DownloadTaskWrapper.swift */; };
 		2BA2EFB0EDB4E03EFCD81971 /* Pods_AudioBase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08CA5548055555A6D22CA572 /* Pods_AudioBase.framework */; };
 		3D32A842B77E350E3AC5F29D /* Pods_AudioBaseTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F10D3ED6227DE7DF5288DAB /* Pods_AudioBaseTests.framework */; };
 		F520B1638B53C9BBA9717ADC /* Pods_AudioBase_AudioBaseUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 459F2BF908FA887E710AA972 /* Pods_AudioBase_AudioBaseUITests.framework */; };
@@ -85,6 +89,10 @@
 		1A6F4B1624D892D300996AA4 /* FileDirectory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileDirectory.swift; sourceTree = "<group>"; };
 		1A6F4B1824D8DB2A00996AA4 /* YoutubeWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubeWebView.swift; sourceTree = "<group>"; };
 		1A6F4B1B24D92E8D00996AA4 /* ScrollViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewManager.swift; sourceTree = "<group>"; };
+		1AC4AF3024DCF1E60094D04A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		1AC4AF3224DCF21B0094D04A /* DownloadsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsView.swift; sourceTree = "<group>"; };
+		1AC4AF3424DCF6C70094D04A /* DownloadTaskContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadTaskContainer.swift; sourceTree = "<group>"; };
+		1AC4AF3624DCFA660094D04A /* DownloadTaskWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadTaskWrapper.swift; sourceTree = "<group>"; };
 		3F10D3ED6227DE7DF5288DAB /* Pods_AudioBaseTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AudioBaseTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		459F2BF908FA887E710AA972 /* Pods_AudioBase_AudioBaseUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AudioBase_AudioBaseUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6328C77A3AA290738AE50A81 /* Pods-AudioBase-AudioBaseUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioBase-AudioBaseUITests.release.xcconfig"; path = "Target Support Files/Pods-AudioBase-AudioBaseUITests/Pods-AudioBase-AudioBaseUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -152,6 +160,8 @@
 				1A6F4B0424D8608C00996AA4 /* UI */,
 				1A3EB19624D3D67A00070548 /* GoogleService-Info.plist */,
 				1A3EB16C24D3D5E300070548 /* Assets.xcassets */,
+				1AC4AF3424DCF6C70094D04A /* DownloadTaskContainer.swift */,
+				1AC4AF3624DCFA660094D04A /* DownloadTaskWrapper.swift */,
 				1A3EB17124D3D5E300070548 /* LaunchScreen.storyboard */,
 				1A3EB17424D3D5E300070548 /* Info.plist */,
 				1A3EB16E24D3D5E300070548 /* Preview Content */,
@@ -197,6 +207,8 @@
 				1A6F4B1024D8741200996AA4 /* Constants.swift */,
 				1A6F4B1224D877CF00996AA4 /* ColorHolder.swift */,
 				1A6F4B1824D8DB2A00996AA4 /* YoutubeWebView.swift */,
+				1AC4AF3024DCF1E60094D04A /* SettingsView.swift */,
+				1AC4AF3224DCF21B0094D04A /* DownloadsView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -489,9 +501,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1AC4AF3724DCFA660094D04A /* DownloadTaskWrapper.swift in Sources */,
+				1AC4AF3524DCF6C70094D04A /* DownloadTaskContainer.swift in Sources */,
 				1A6F4B0A24D868D100996AA4 /* PlaylistsView.swift in Sources */,
 				1A6F4B0624D860BC00996AA4 /* LibraryView.swift in Sources */,
+				1AC4AF3324DCF21B0094D04A /* DownloadsView.swift in Sources */,
 				1A3EB16724D3D5DF00070548 /* AppDelegate.swift in Sources */,
+				1AC4AF3124DCF1E60094D04A /* SettingsView.swift in Sources */,
 				1A6F4B1C24D92E8D00996AA4 /* ScrollViewManager.swift in Sources */,
 				1A6F4B1724D892D300996AA4 /* FileDirectory.swift in Sources */,
 				1A6F4B0D24D8694600996AA4 /* SongsView.swift in Sources */,

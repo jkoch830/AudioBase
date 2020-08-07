@@ -13,7 +13,7 @@ struct PlaylistsView: View {
     var body: some View {
         VStack {
             Button(action: {
-                tempFunction()
+                print("NOTHINGs")
                    }) {
                        Text("DOWNLOAD")
                    }

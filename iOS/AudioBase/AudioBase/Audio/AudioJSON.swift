@@ -11,7 +11,7 @@ import Foundation
 struct AudioInfo: Codable {
     let title: String
     let artist: String
-    let fileURL: URL
+    let youtubeURL: String
 }
 
 

@@ -8,8 +8,11 @@
 
 import Foundation
 import SwiftUI
+import FirebaseStorage
+
 struct MainTabController: View {
     @EnvironmentObject var colorHolder: ColorHolder
+    @State var downloadTasks = [StorageDownloadTask]()
     var body: some View {
         TabView {
             LibraryView()
@@ -21,6 +24,16 @@ struct MainTabController: View {
                 .tabItem {
                     Image(systemName: "magnifyingglass")
                     Text("Search")
+            }
+            DownloadsView()
+                .tabItem {
+                    Image(systemName: "square.and.arrow.down")
+                    Text("Downloads")
+            }
+            SettingsView()
+                .tabItem {
+                    Image(systemName: "gear")
+                    Text("Settings")
             }
         }.accentColor(colorHolder.selected())
     }
