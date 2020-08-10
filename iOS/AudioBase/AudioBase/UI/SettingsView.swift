@@ -9,14 +9,53 @@
 import SwiftUI
 
 struct SettingsView: View {
+    @EnvironmentObject var audioFileManager: AudioFileManager
+    @State var uploadSuccessful: Bool?
+    @State var downloadSuccessful: Bool?
     var body: some View {
         Form {
-            // Sync Button
+            // Sync Local to Cloud Button
             Section {
-                Button(action: {
-                    print("Syncing")
-                }) {
-                    Text("Sync With Firebase Storage")
+                VStack(alignment: .leading) {
+                    Button(action: {
+                        self.downloadSuccessful = nil
+                        let downloadTask = self.audioFileManager.mergeLocalWithStorage()
+                        downloadTask.observe(.success) { snapshot in
+                            self.downloadSuccessful = true
+                        }
+                        downloadTask.observe(.failure) { snapshot in
+                            self.downloadSuccessful = false
+                        }
+                    }) {
+                        Text("Merge Local with Cloud")
+                    }
+                    if downloadSuccessful != nil && downloadSuccessful! {
+                        Text("Success").foregroundColor(.green)
+                    } else if downloadSuccessful != nil && !downloadSuccessful! {
+                        Text("Failure").foregroundColor(.red)
+                    }
+                }
+            }
+            // Sync Cloud to Local Button
+            Section {
+                VStack(alignment: .leading) {
+                    Button(action: {
+                        self.uploadSuccessful = nil
+                        let uploadTask = self.audioFileManager.syncLocalToStorage()
+                        uploadTask.observe(.success) { snapshot in
+                            self.uploadSuccessful = true
+                        }
+                        uploadTask.observe(.failure) { snapshot in
+                            self.uploadSuccessful = false
+                        }
+                    }) {
+                        Text("Overwrite Cloud with Local")
+                    }
+                    if uploadSuccessful != nil && uploadSuccessful! {
+                        Text("Success").foregroundColor(.green)
+                    } else if uploadSuccessful != nil && !uploadSuccessful! {
+                        Text("Failure").foregroundColor(.red)
+                    }
                 }
             }
         }

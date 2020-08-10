@@ -31,7 +31,7 @@ def download_and_convert():
     url: str = request.args['url']
     title: str = request.args['title']
     command: str = f"youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' " \
-                   f"--output './tmp/{title}.mp4' '{url}'"
+                   f"--output './tmp/{title}.mp4' --verbose '{url}'"
     download_process = subprocess.run(command,
                                       shell=True,
                                       stdout=subprocess.PIPE,

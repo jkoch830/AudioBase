@@ -12,7 +12,7 @@ import FirebaseStorage
 
 struct MainTabController: View {
     @EnvironmentObject var colorHolder: ColorHolder
-    @State var downloadTasks = [StorageDownloadTask]()
+    @EnvironmentObject var audioFileManager: AudioFileManager
     var body: some View {
         TabView {
             LibraryView()
@@ -25,7 +25,7 @@ struct MainTabController: View {
                     Image(systemName: "magnifyingglass")
                     Text("Search")
             }
-            DownloadsView()
+            DownloadsView(taskContainer: self.audioFileManager.downloadTaskContainer)
                 .tabItem {
                     Image(systemName: "square.and.arrow.down")
                     Text("Downloads")

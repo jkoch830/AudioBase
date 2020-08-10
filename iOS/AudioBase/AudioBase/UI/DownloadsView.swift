@@ -9,34 +9,52 @@
 import SwiftUI
 import FirebaseStorage
 
-struct DownloadsView: View {
-    @EnvironmentObject var downloadTaskContainer: DownloadTaskContainer
+extension Double {
+    /// Rounds the double to decimal places value
+    func rounded(toPlaces places:Int) -> Double {
+        let divisor = pow(10.0, Double(places))
+        return (self * divisor).rounded() / divisor
+    }
+}
+
+struct DownloadTaskRow: View {
+    @ObservedObject var downloadTask: DownloadTaskWrapper
     
-    func getStatusString(task: DownloadTaskWrapper) -> String {
-        if task.complete {
-            return "\(task.title): Complete"
-        } else if task.failure {
-            return "\(task.title): Failed"
+    func getStatusString() -> String {
+        if self.downloadTask.complete {
+            return "\(downloadTask.title): Complete"
+        } else if downloadTask.failure {
+            return "\(downloadTask.title): Failed"
         } else {
-            return "\(task.title): \(task.progress)"
+            return "\(downloadTask.title): \(downloadTask.progress.rounded(toPlaces: 2))"
         }
     }
+    
+    var body: some View {
+        Text(self.getStatusString())
+    }
+}
+
+
+struct DownloadsView: View {
+    @EnvironmentObject var audioFileManager: AudioFileManager
+    @ObservedObject var taskContainer: DownloadTaskContainer
     
     var body: some View {
         NavigationView {
             List {
                 Section {
-                    ForEach(self.downloadTaskContainer.getDownloadTasks(), id: \.self) { task in
-                        Text(self.getStatusString(task: task))
+                    ForEach(self.taskContainer.getDownloadTasks(), id: \.self.title) { task in
+                        DownloadTaskRow(downloadTask: task)
                     }
                 }
             }.navigationBarTitle("Active Downloads")
+                .navigationBarItems(trailing: Button(action: {
+                    self.taskContainer.clear()
+                }) {
+                    Text("Clear")
+                })
         }.padding(.top, 10)
     }
 }
 
-struct DownloadsView_Previews: PreviewProvider {
-    static var previews: some View {
-        DownloadsView()
-    }
-}

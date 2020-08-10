@@ -50,6 +50,8 @@ class DownloadTaskWrapper: ObservableObject, Hashable {
     }
     
     static func == (lhs: DownloadTaskWrapper, rhs: DownloadTaskWrapper) -> Bool {
-        return lhs.storageDownloadTask == rhs.storageDownloadTask
+        return lhs.storageDownloadTask == rhs.storageDownloadTask &&
+            lhs.complete == rhs.complete && lhs.failure == rhs.failure &&
+            lhs.progress == rhs.progress
     }
 }

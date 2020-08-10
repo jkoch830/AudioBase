@@ -24,7 +24,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let contentView = ContentView()
             .environmentObject(AudioPlayer())
             .environmentObject(ColorHolder())
-            .environmentObject(DownloadTaskContainer())
+            .environmentObject(AudioFileManager())
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {

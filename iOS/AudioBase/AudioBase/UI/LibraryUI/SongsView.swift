@@ -88,7 +88,7 @@ struct SongRow: View {
     @EnvironmentObject var audioPlayer: AudioPlayer
     var body: some View {
         Button(action: {
-            self.audioPlayer.play(songName: "\(self.audioInfo.title).mp3")
+            self.audioPlayer.play(songName: self.audioInfo.title)
         }) {
             VStack (alignment: .leading, spacing: 5) {
                 Text(self.audioInfo.title)
@@ -106,6 +106,13 @@ struct SongRow: View {
 
 struct SongsView: View {
     @State var indexPathToSetVisible: IndexPath?
+    @State var sortByTitle: Bool = true
+    @EnvironmentObject var audioFileManager: AudioFileManager
+    
+    func getSortedAudioInfo() -> [AudioInfo] {
+        return self.audioFileManager.getSortedAudioInfo(sortByTitle: self.sortByTitle)
+    }
+    
     var body: some View {
         // List of all songs
         VStack {
@@ -116,9 +123,10 @@ struct SongsView: View {
             
             // List of all songs
             List {
-                ForEach(getAllAudioInfoArray(), id: \.self.title) {audioInfo in
-                    SongRow(audioInfo: audioInfo)
-                }
+                ForEach(self.getSortedAudioInfo(), id: \.self.title) {info in
+                    SongRow(audioInfo: info)
+                    
+                }.onDelete(perform: delete)
             }.overlay(
                 ScrollManagerView(indexPathToSetVisible: $indexPathToSetVisible)
                     .allowsHitTesting(false).frame(width: 0, height: 0)
@@ -138,5 +146,14 @@ struct SongsView: View {
             PlayerButtons()
         }
     }
+    
+        func delete(with indexSet: IndexSet) {
+            indexSet.forEach { index in
+                let title = self.getSortedAudioInfo()[index].title
+                self.audioFileManager.deleteAudioInfo(title: title)
+                print(getDocumentsDirectory())
+            }
+
+        }
 }
 

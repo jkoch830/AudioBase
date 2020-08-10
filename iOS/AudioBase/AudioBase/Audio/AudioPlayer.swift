@@ -18,7 +18,7 @@ class AudioPlayer: ObservableObject {
 
     func play(songName: String) {
         let filename = songNameToFilename(songName: songName)
-        let localURL = getAudioDirectory(audioFilename: filename)
+        let localURL = getAudioFileURL(audioFilename: filename)
         print(localURL)
         do {
             self.player = try AVAudioPlayer(contentsOf: localURL)

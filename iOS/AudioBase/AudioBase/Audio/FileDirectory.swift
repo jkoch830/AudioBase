@@ -10,7 +10,7 @@ import Foundation
 func songNameToFilename(songName: String) -> String {
     var formatted = songName.replacingOccurrences(of: "\'", with: "-")
     formatted = formatted.replacingOccurrences(of: " ", with: "_")
-    return formatted
+    return "\(formatted).mp3"
 }
 
 func getDocumentsDirectory() -> URL {
@@ -19,11 +19,15 @@ func getDocumentsDirectory() -> URL {
     return documentsDirectory
 }
 
-func getAudioFilesJSONURL() -> URL {
+func getAudioInfoURL() -> URL {
     return getDocumentsDirectory().appendingPathComponent("audioFiles.json")
 }
 
-func getAudioDirectory(audioFilename: String) -> URL {
+func getPlaylistURL() -> URL {
+    return getDocumentsDirectory().appendingPathComponent("playlists.json")
+}
+
+func getAudioFileURL(audioFilename: String) -> URL {
     let documentsURL: URL = getDocumentsDirectory()
     return documentsURL.appendingPathComponent("audio/\(audioFilename)")
 }
@@ -35,12 +39,16 @@ func getAllMP3Files() -> [String] {
         let directoryContents = try FileManager.default.contentsOfDirectory(at: dir, includingPropertiesForKeys: nil)
         // if you want to filter the directory contents you can do like this:
         let mp3Files = directoryContents.filter{ $0.pathExtension == "mp3" }
-        let mp3FileNames = mp3Files.map{ $0.deletingPathExtension().lastPathComponent }
+        let mp3FileNames = mp3Files.map{ $0.lastPathComponent }
         return mp3FileNames
     } catch {
         print(error)
         return []
     }
+}
+
+func audioFileExists(songName: String) -> Bool {
+    return getAllMP3Files().contains(songNameToFilename(songName: songName))
 }
 
 

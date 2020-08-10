@@ -11,7 +11,7 @@ import FirebaseStorage
 
 struct DownloadAudioView: View {
     @ObservedObject var colorHolder: ColorHolder
-    @ObservedObject var downloadTaskContainer: DownloadTaskContainer
+    @ObservedObject var audioFileManager: AudioFileManager
     let youtubeURL: String
     @State var title: String = ""
     @State var artist: String = ""
@@ -31,9 +31,9 @@ struct DownloadAudioView: View {
                 // Download Button
                 Button(action: {
                     let fixSingleQuote = self.title.replacingOccurrences(of: "’", with: "'")
-                    fireNewMP3ToStorage(youtubeURL: self.youtubeURL, title: fixSingleQuote,
-                                        artist: self.artist,
-                                        taskContainer: self.downloadTaskContainer)
+                    self.audioFileManager.downloadNewAudio(youtubeURL: self.youtubeURL,
+                                                           title: fixSingleQuote,
+                                                           artist: self.artist)
                     self.showingView = false
                 }) {
                     Text("Download").foregroundColor(self.colorHolder.selected())
@@ -48,7 +48,7 @@ struct DownloadAudioView: View {
 
 struct SearchView: View {
     @EnvironmentObject var colorHolder: ColorHolder
-    @EnvironmentObject var downloadTaskContainer: DownloadTaskContainer
+    @EnvironmentObject var audioFileManager: AudioFileManager
     @State var showingDownload: Bool = false
     var webView: YoutubeWebView = YoutubeWebView()
     var body: some View {
@@ -60,7 +60,7 @@ struct SearchView: View {
                                    height: Constants.DEVICE_HEIGHT / 12)
             }.sheet(isPresented: self.$showingDownload) {
                 DownloadAudioView(colorHolder: self.colorHolder,
-                                  downloadTaskContainer: self.downloadTaskContainer,
+                                  audioFileManager: self.audioFileManager,
                                   youtubeURL: self.webView.getCurrentURL(),
                                   showingView: self.$showingDownload)
             }
@@ -68,9 +68,3 @@ struct SearchView: View {
         }
     }
 }
-//
-//struct SearchView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        SearchView()
-//    }
-//}

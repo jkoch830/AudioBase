@@ -15,10 +15,17 @@ class DownloadTaskContainer: ObservableObject {
     
     func addDownloadTask(_ task: DownloadTaskWrapper) {
         downloadTasks.append(task)
-        
     }
     
     func getDownloadTasks() -> [DownloadTaskWrapper] {
         return self.downloadTasks
+    }
+    
+    func getFailedDownloadTasks() -> [DownloadTaskWrapper] {
+        return self.downloadTasks.filter { $0.failure }
+    }
+    
+    func clear() {
+        self.downloadTasks.removeAll()
     }
 }
