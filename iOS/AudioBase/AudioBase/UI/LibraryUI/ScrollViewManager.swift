@@ -25,7 +25,7 @@ struct ScrollManagerView: UIViewRepresentable {
         if let tableView = superview?.subview(of: UITableView.self) {
             if tableView.numberOfSections > indexPath.section &&
                 tableView.numberOfRows(inSection: indexPath.section) > indexPath.row {
-                tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+                tableView.scrollToRow(at: indexPath, at: .top, animated: true)
             }
         }
         
