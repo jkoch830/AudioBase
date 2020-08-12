@@ -58,13 +58,20 @@ struct PlayShuffleButtons: View {
 
 struct PlayerButtons: View {
     @EnvironmentObject var audioPlayer: AudioPlayer
+    @EnvironmentObject var audioFileManager: AudioFileManager
     var body: some View {
         HStack {
             Button(action: {
                 if self.audioPlayer.isPlaying {
                     self.audioPlayer.pause()
-                } else {
+                } else if self.audioPlayer.hasCurrentAudio() {
                     self.audioPlayer.resume()
+                } else {
+                    let randomAudioInfo = self.audioFileManager.allAudioInfo.randomElement()
+                    if let randomAudioInfo = randomAudioInfo {
+                        self.audioPlayer.play(songName: randomAudioInfo.key)
+                    }
+                    
                 }
                 
             }) {
@@ -100,6 +107,44 @@ struct SongRow: View {
                     .font(.system(size: Constants.SONG_ARTIST_SIZE))
                     .foregroundColor(Color.gray)
             }
+        }
+    }
+}
+
+struct MyButtonStyle: PrimitiveButtonStyle {
+  func makeBody(configuration: Configuration) -> some View {
+    configuration
+      .label
+      .onLongPressGesture(
+        minimumDuration: 0,
+        perform: configuration.trigger
+    )
+  }
+}
+
+struct SectionShortcuts: View {
+    let sortedSections: [Character]
+    let sectionIndices: [Character: Int]
+    @Binding var indexPathToSetVisible: IndexPath?
+    @EnvironmentObject var colorHolder: ColorHolder
+    
+    func setIndexPath(_ section: Character) {
+        let sectionIndices = self.sectionIndices
+        self.indexPathToSetVisible = IndexPath(
+            row: 0, section: sectionIndices[section]!
+        )
+    }
+
+    var body: some View {
+        ForEach(self.sortedSections, id: \.self) { section in
+            Button(action: {
+                self.setIndexPath(section)
+            }) {
+                Text(String(section))
+                    .foregroundColor(self.colorHolder.selected())
+                    .frame(width: 20, height: 20)
+                    .background(Color(UIColor.systemGray6))
+            }.buttonStyle(MyButtonStyle())
         }
     }
 }
@@ -155,15 +200,6 @@ struct SongsView: View {
 
     }
     
-    func setIndexPath(_ section: Character) {
-        let sectionIndices = self.getAllSectionIndices()
-        print(section)
-        print(sectionIndices)
-        self.indexPathToSetVisible = IndexPath(
-            row: 0, section: sectionIndices[section]!
-        )
-    }
-    
     var body: some View {
         // List of all songs
         ZStack {
@@ -199,14 +235,9 @@ struct SongsView: View {
             HStack {
                 Spacer()
                 VStack {
-                    ForEach(self.getSortedSections(), id: \.self) { section in
-                        Button(action: {
-                            self.setIndexPath(section)
-                        }) {
-                            Text(String(section))
-                                .foregroundColor(self.colorHolder.selected())
-                        }
-                    }
+                    SectionShortcuts(sortedSections: self.getSortedSections(),
+                                     sectionIndices: self.getAllSectionIndices(),
+                                     indexPathToSetVisible: self.$indexPathToSetVisible)
                 }
             }
             

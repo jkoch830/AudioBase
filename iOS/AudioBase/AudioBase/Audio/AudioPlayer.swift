@@ -15,23 +15,28 @@ class AudioPlayer: ObservableObject {
     private var player: AVAudioPlayer!
     
     @Published var isPlaying: Bool = false
+    @Published var currentSong: String?
 
     func play(songName: String) {
         let filename = songNameToFilename(songName: songName)
         let localURL = getAudioFileURL(audioFilename: filename)
-        print(localURL)
         do {
             self.player = try AVAudioPlayer(contentsOf: localURL)
             self.player.prepareToPlay()
             self.player.play()
             self.isPlaying = true
+            self.currentSong = songName
         } catch {
             print(error)
         }
     }
+    
+    func hasCurrentAudio() -> Bool {
+        return self.player != nil && self.player.url != nil
+    }
 
     func pause() {
-        self.player?.pause()
+        self.player.pause()
         self.isPlaying = false
     }
     
