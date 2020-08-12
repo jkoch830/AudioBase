@@ -150,10 +150,19 @@ struct SectionShortcuts: View {
 }
 
 struct SongsView: View {
+    let scrollManager = ScrollManager()
     @State var indexPathToSetVisible: IndexPath?
     @State var sortByTitle: Bool = true
     @EnvironmentObject var audioFileManager: AudioFileManager
     @EnvironmentObject var colorHolder: ColorHolder
+    
+    
+    var tableViewFinderOverlay: AnyView {
+        if scrollManager.tableView == nil {
+            return AnyView(TableViewFinder(scrollManager: scrollManager))
+        }
+        return AnyView(EmptyView())
+    }
     
     func getSortedAudioInfo() -> [AudioInfo] {
         return self.audioFileManager.getSortedAudioInfo(sortByTitle: self.sortByTitle)
@@ -200,6 +209,17 @@ struct SongsView: View {
 
     }
     
+    func placeSectionShortcuts() -> some View {
+        HStack {
+            Spacer()
+            VStack {
+                SectionShortcuts(sortedSections: self.getSortedSections(),
+                                 sectionIndices: self.getAllSectionIndices(),
+                                 indexPathToSetVisible: self.$indexPathToSetVisible)
+            }
+        }
+    }
+    
     var body: some View {
         // List of all songs
         ZStack {
@@ -213,35 +233,23 @@ struct SongsView: View {
                 List {
                     ForEach(Array(self.getSortedSections()), id: \.self) { char in
                         Section(header: Text(String(char))) {
-                            ForEach(self.getSectionalAudioInfo()[char]!, id: \.self.title) {info in
+                            ForEach(self.getSectionalAudioInfo()[char]!, id: \.self.title) { info in
                                 SongRow(audioInfo: info)
+                                    .overlay(self.tableViewFinderOverlay.frame(width: 0, height: 0))
                             }.onDelete(perform: self.delete)
                         }
                     }
                 }
                 .navigationBarTitle("Songs")
-                .navigationBarItems(leading:
-                    Button("Scroll to top") {
-                        self.indexPathToSetVisible = IndexPath(
-                            row: 0, section: 0
-                        )
-                    })
-                
                 // Currently playing section
                 PlayerButtons()
             }
             
             // Section shortcuts
-            HStack {
-                Spacer()
-                VStack {
-                    SectionShortcuts(sortedSections: self.getSortedSections(),
-                                     sectionIndices: self.getAllSectionIndices(),
-                                     indexPathToSetVisible: self.$indexPathToSetVisible)
-                }
-            }
+            placeSectionShortcuts()
             
-            ScrollManagerView(indexPathToSetVisible: $indexPathToSetVisible)
+            ScrollManagerView(scrollManager: self.scrollManager,
+                              indexPathToSetVisible: $indexPathToSetVisible)
                 .allowsHitTesting(false).frame(width: 0, height: 0)
         }
     }
