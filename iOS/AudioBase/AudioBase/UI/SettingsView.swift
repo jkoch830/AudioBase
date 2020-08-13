@@ -10,6 +10,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @EnvironmentObject var audioFileManager: AudioFileManager
+    @EnvironmentObject var colorHolder: ColorHolder
     @State var uploadSuccessful: Bool?
     @State var downloadSuccessful: Bool?
     var body: some View {
@@ -55,6 +56,16 @@ struct SettingsView: View {
                         Text("Success").foregroundColor(.green)
                     } else if uploadSuccessful != nil && !uploadSuccessful! {
                         Text("Failure").foregroundColor(.red)
+                    }
+                }
+            }
+            Section {
+                Button(action: {
+                    self.colorHolder.toggle()
+                }) {
+                    HStack {
+                        Text("Change Color")
+                        Image(systemName: "eyedropper.full")
                     }
                 }
             }

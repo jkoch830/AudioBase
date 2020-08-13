@@ -8,15 +8,6 @@
 
 import SwiftUI
 
-struct ColorPicker: View {
-    @EnvironmentObject var colorHolder: ColorHolder
-    @State var currentColor: Color = Color.blue
-    var body: some View {
-        Button(action: {self.colorHolder.toggle()}) {
-            Image(systemName: "eyedropper.full")
-        }
-    }
-}
 
 struct LibraryView: View {
     @EnvironmentObject var colorHolder: ColorHolder
@@ -42,7 +33,7 @@ struct LibraryView: View {
                             .foregroundColor(colorHolder.selected())
                             .padding(.vertical, 5)
                     }
-                    }.navigationBarTitle("Library").navigationBarItems(trailing: ColorPicker())
+                }.navigationBarTitle("Library")
             }
         }
     }
