@@ -10,18 +10,11 @@ import SwiftUI
 import AVFoundation
 
 struct PlaylistsView: View {
+    @EnvironmentObject var audioFileManager: AudioFileManager
     var body: some View {
-        VStack {
-            Button(action: {
-                print("NOTHINGs")
-                   }) {
-                       Text("DOWNLOAD")
-                   }
-            Button(action: {
-                print(getAllMP3Files())
-                print(getDocumentsDirectory())
-            }) {
-                Text("TEST")
+        List {
+            ForEach(self.audioFileManager.getSortedPlaylists(), id: \.self) { playlist in
+                Text(playlist.playlistTitle)
             }
         }
     }

@@ -18,20 +18,26 @@ struct AudioInfo: Codable, Hashable {
 }
 
 
-struct Playlist: Codable {
+struct Playlist: Codable, Hashable {
     let playlistTitle: String
     let songTitles: [String]
 }
 
 
-class AudioFileManager: ObservableObject {
+final class AudioFileManager: ObservableObject {
     @Published var allAudioInfo: [String: AudioInfo]!
+    @Published var playlists: [String: Playlist]!
     var downloadTaskContainer: DownloadTaskContainer = DownloadTaskContainer()
     
     init() {
-        self.verifyAudioFileExists()
+        self.verifyJSONFileExists(url: getAudioInfoURL())
+        self.verifyJSONFileExists(url: getPlaylistURL())
         self.allAudioInfo = self.getAllAudioInfo()
+        self.playlists = self.getPlaylists()
     }
+}
+    
+extension AudioFileManager {
     
     func clearDownloads() {
         self.downloadTaskContainer.clear()
@@ -79,7 +85,32 @@ class AudioFileManager: ObservableObject {
     func downloadNewAudio(youtubeURL: String, title: String, artist: String) {
         self.downloadYoutubeToStorage(youtubeURL: youtubeURL, title: title, artist: artist)
     }
+}
+
+// Playlist functionality
+extension AudioFileManager {
+    func getPlaylists() -> [String: Playlist] {
+        let url = getPlaylistURL()
+        let data = try! Data(contentsOf: url)
+        let decoder = JSONDecoder()
+        return try! decoder.decode([String: Playlist].self, from: data)
+    }
     
+    func addPlaylist(title: String, songs: [String]) {
+        let newPlaylist = Playlist(playlistTitle: title, songTitles: songs)
+        self.playlists[title] = newPlaylist
+        self.overwritePlaylistInfo(newPlaylistJSON: self.playlists)
+    }
+    
+    func getSortedPlaylists() -> [Playlist] {
+        return Array(self.getPlaylists().values)
+    }
+    
+    
+}
+
+// Firebase methods
+extension AudioFileManager {
     /// Replaces all saved data in Firebase Storage with the current, local data
     /// - Returns: The upload task
     func syncLocalToStorage() -> StorageUploadTask {
@@ -109,11 +140,6 @@ class AudioFileManager: ObservableObject {
             }
         }
     }
-}
-
-
-
-fileprivate extension AudioFileManager {
     
     private func downloadYoutubeToStorage(youtubeURL: String, title: String, artist: String) {
         // Hit cloud function endpoint
@@ -166,6 +192,14 @@ fileprivate extension AudioFileManager {
         return "audioInfo.json"
     }
     
+    func overwritePlaylistInfo(newPlaylistJSON: [String: Playlist]) {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted]
+        let newData: Data = try! encoder.encode(newPlaylistJSON)
+        let newJSONString = String(data: newData, encoding: .utf8)!
+        try! newJSONString.write(to: getPlaylistURL(), atomically: true, encoding: .utf8)
+    }
+    
     /// Overwrites the audioInfoJSON file with new daata
     /// - Parameter newAudioInfoJSON: The new JSON information that is being used to overwrite the current data
     /// - Throws: Error if writing to file fails
@@ -177,9 +211,7 @@ fileprivate extension AudioFileManager {
         try! newJSONString.write(to: getAudioInfoURL(), atomically: true, encoding: .utf8)
     }
     
-    /// Checks that the audio JSON file exists. If it doesn't exist or if it's empty, an empty dictionary is initialized
-    func verifyAudioFileExists() {
-        let url = getAudioInfoURL()
+    func verifyJSONFileExists(url : URL) {
         do {
             // Check that file exists
             if !FileManager.default.fileExists(atPath: url.path) {

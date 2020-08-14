@@ -204,7 +204,6 @@ struct SongsView: View {
         indexSet.forEach { index in
             let title = self.getSortedAudioInfo()[index].title
             self.audioFileManager.deleteAudioInfo(title: title)
-            print(getDocumentsDirectory())
         }
 
     }
