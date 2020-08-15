@@ -208,7 +208,6 @@ struct SongsView: View {
             let title = self.getSortedAudioInfo()[index].title
             self.audioFileManager.deleteAudioInfo(title: title)
         }
-
     }
     
     var body: some View {
@@ -226,7 +225,11 @@ struct SongsView: View {
                             }.onDelete(perform: self.delete)
                         }
                     }
-                }.navigationBarTitle("Songs")
+                }
+                .navigationBarTitle("Songs")
+                .onAppear {
+                    UITableView.appearance().showsVerticalScrollIndicator = false
+                }
                 
                 // Section shortcuts
                 SectionShortcuts(sortedSections: self.getSortedSections(),

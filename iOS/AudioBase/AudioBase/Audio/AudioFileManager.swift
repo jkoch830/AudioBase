@@ -106,6 +106,11 @@ extension AudioFileManager {
         return Array(self.getPlaylists().values)
     }
     
+    func deletePlaylist(title: String) {
+        self.playlists.removeValue(forKey: title)
+        self.overwritePlaylistInfo(newPlaylistJSON: self.playlists)
+    }
+    
     
 }
 

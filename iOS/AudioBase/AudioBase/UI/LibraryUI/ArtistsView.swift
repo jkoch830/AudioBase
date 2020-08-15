@@ -10,7 +10,7 @@ import SwiftUI
 
 struct ArtistsView: View {
     var body: some View {
-        Text("ArtistsView")
+        Text("Artists View").font(.title)
     }
 }
 

@@ -130,6 +130,13 @@ struct SongSelectionView: View {
     }
 }
 
+struct PlaylistPageView: View {
+    @State var playlist: Playlist
+    var body: some View {
+        Text(self.playlist.playlistTitle)
+    }
+}
+
 
 struct NewPlaylistView: View {
     @State var playlistName: String = ""
@@ -143,36 +150,38 @@ struct NewPlaylistView: View {
                 Section {
                     TextField("Playlist Name", text: self.$playlistName)
                         .multilineTextAlignment(.center)
-                }
-                Section {
-                    NavigationLink(destination: SongSelectionView(selectedSongs: $selectedSongs)) {
-                        HStack {
-                            Image(systemName: "plus.circle.fill")
-                            Text("Add Music")
-                        }
-                    }
-                }
+                        .font(.title)
+                }.padding(.top, Constants.NEW_PLAYLIST_TITLE_PADDING)
+                Divider()
                 List {
+                    NavigationLink(destination: SongSelectionView(selectedSongs: $selectedSongs)) {
+                       HStack {
+                            Image(systemName: "plus.circle.fill").foregroundColor(.green)
+                        Text("Add Music").foregroundColor(self.colorHolder.selected())
+                       }
+                   }
                     ForEach(selectedSongs, id: \.self) { selectedSong in
                         Text(selectedSong)
                     }
+                }.onAppear {
+                    UITableView.appearance().showsVerticalScrollIndicator = false
                 }
+                
             }
             .navigationBarTitle("New Playlist", displayMode: .inline)
             .navigationBarItems(
                 leading:
-                Button(action: {
+                Button("Cancel") {
                     self.showingNewPlaylistView = false
-                }) {
-                    Text("Cancel")
                 },
                 trailing:
-                Button(action: {
+                Button("Done") {
+                    if self.playlistName != "" {
+                        self.audioFileManager.addPlaylist(title: self.playlistName,
+                                                          songs: self.selectedSongs)
+                    }
                     self.showingNewPlaylistView = false
-                    
-                }) {
-                Text("Done")
-            })
+                })
         }
     }
 }
@@ -181,6 +190,15 @@ struct PlaylistsView: View {
     @EnvironmentObject var audioFileManager: AudioFileManager
     @EnvironmentObject var colorHolder: ColorHolder
     @State var showingNewPlaylistView: Bool = false
+    
+    func delete(with indexSet: IndexSet) {
+        indexSet.forEach { index in
+            let title = self.audioFileManager.getSortedPlaylists()[index].playlistTitle
+            self.audioFileManager.deletePlaylist(title: title)
+        }
+
+    }
+    
     var body: some View {
         List {
             Button(action: {
@@ -198,9 +216,11 @@ struct PlaylistsView: View {
                     .environmentObject(self.audioFileManager)
             }
             ForEach(self.audioFileManager.getSortedPlaylists(), id: \.self) { playlist in
-                Text(playlist.playlistTitle)
-            }
-        }
+                NavigationLink(destination: PlaylistPageView(playlist: playlist)) {
+                    Text(playlist.playlistTitle)
+                }
+            }.onDelete(perform: self.delete)
+        }.navigationBarTitle("Playlists")
     }
 }
 

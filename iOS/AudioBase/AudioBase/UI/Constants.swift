@@ -12,7 +12,6 @@ import SwiftUI
 struct Constants {
     static let DEVICE_WIDTH = UIScreen.main.bounds.width
     static let DEVICE_HEIGHT = UIScreen.main.bounds.height
-    // Songs View
     static let SONGS_BUTTONS_WIDTH = Constants.DEVICE_WIDTH * 5 / 12
     static let SONGS_BUTTONS_HEIGHT = Constants.DEVICE_HEIGHT / 16
     static let SONGS_BUTTONS_CORNER_RADIUS = CGFloat(10)
@@ -20,4 +19,5 @@ struct Constants {
     static let SONG_TITLE_SIZE = CGFloat(20)
     static let SONG_ARTIST_SIZE = CGFloat(15)
     static let SECTION_INDEX_WIDTH = CGFloat(15)
+    static let NEW_PLAYLIST_TITLE_PADDING = CGFloat(20)
 }
