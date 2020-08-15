@@ -90,7 +90,7 @@ struct PlayerButtons: View {
     }
 }
 
-struct SongRow: View {
+struct PlayableSongRow: View {
     let audioInfo: AudioInfo
     @EnvironmentObject var audioPlayer: AudioPlayer
     var body: some View {
@@ -103,7 +103,6 @@ struct SongRow: View {
                     .font(.title)
                     .fontWeight(.light)
                 Text(self.audioInfo.artist)
-                    //.font(.footnote)
                     .font(.system(size: Constants.SONG_ARTIST_SIZE))
                     .foregroundColor(Color.gray)
             }
@@ -112,14 +111,14 @@ struct SongRow: View {
 }
 
 struct MyButtonStyle: PrimitiveButtonStyle {
-  func makeBody(configuration: Configuration) -> some View {
-    configuration
-      .label
-      .onLongPressGesture(
-        minimumDuration: 0,
-        perform: configuration.trigger
-    )
-  }
+    func makeBody(configuration: Configuration) -> some View {
+        configuration
+            .label
+            .onLongPressGesture(
+                minimumDuration: 0,
+                perform: configuration.trigger
+        )
+    }
 }
 
 struct SectionShortcuts: View {
@@ -136,15 +135,19 @@ struct SectionShortcuts: View {
     }
 
     var body: some View {
-        ForEach(self.sortedSections, id: \.self) { section in
-            Button(action: {
-                self.setIndexPath(section)
-            }) {
-                Text(String(section))
-                    .foregroundColor(self.colorHolder.selected())
-                    .frame(width: 20, height: 20)
-                    .background(Color(UIColor.systemGray6))
-            }.buttonStyle(MyButtonStyle())
+        VStack {
+            ForEach(self.sortedSections, id: \.self) { section in
+                Button(action: {
+                    self.setIndexPath(section)
+                }) {
+                    Text(String(section))
+                        .font(.system(size: Constants.SECTION_INDEX_WIDTH))
+                        .foregroundColor(self.colorHolder.selected())
+                        .frame(width: Constants.SECTION_INDEX_WIDTH,
+                               height: Constants.SECTION_INDEX_WIDTH)
+                        .background(Color(UIColor.systemGray6))
+                }.buttonStyle(MyButtonStyle())
+            }
         }
     }
 }
@@ -208,45 +211,30 @@ struct SongsView: View {
 
     }
     
-    func placeSectionShortcuts() -> some View {
-        HStack {
-            Spacer()
-            VStack {
-                SectionShortcuts(sortedSections: self.getSortedSections(),
-                                 sectionIndices: self.getAllSectionIndices(),
-                                 indexPathToSetVisible: self.$indexPathToSetVisible)
-            }
-        }
-    }
-    
     var body: some View {
-        // List of all songs
-        ZStack {
-            VStack {
-                // Play and shuffle button
-                PlayShuffleButtons().padding(.top, 15)
-                Divider()
-                //TableViewControllerWrapper()
-                
+        VStack {
+            PlayShuffleButtons()
+            HStack(spacing: 0) {
                 // Sort all songs by section
                 List {
+                    // Play and shuffle button
                     ForEach(Array(self.getSortedSections()), id: \.self) { char in
                         Section(header: Text(String(char))) {
                             ForEach(self.getSectionalAudioInfo()[char]!, id: \.self.title) { info in
-                                SongRow(audioInfo: info)
+                                PlayableSongRow(audioInfo: info)
                                     .overlay(self.tableViewFinderOverlay.frame(width: 0, height: 0))
                             }.onDelete(perform: self.delete)
                         }
                     }
-                }
-                .navigationBarTitle("Songs")
-                // Currently playing section
-                PlayerButtons()
+                }.navigationBarTitle("Songs")
+                
+                // Section shortcuts
+                SectionShortcuts(sortedSections: self.getSortedSections(),
+                                 sectionIndices: self.getAllSectionIndices(),
+                                 indexPathToSetVisible: self.$indexPathToSetVisible)
             }
-            
-            // Section shortcuts
-            placeSectionShortcuts()
-            
+            // Currently playing section
+            PlayerButtons()
             ScrollManagerView(scrollManager: self.scrollManager,
                               indexPathToSetVisible: $indexPathToSetVisible)
                 .allowsHitTesting(false).frame(width: 0, height: 0)

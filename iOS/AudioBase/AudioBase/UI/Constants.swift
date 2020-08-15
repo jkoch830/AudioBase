@@ -19,4 +19,5 @@ struct Constants {
     static let SONG_ROW_HEIGHT = Constants.DEVICE_HEIGHT / 10
     static let SONG_TITLE_SIZE = CGFloat(20)
     static let SONG_ARTIST_SIZE = CGFloat(15)
+    static let SECTION_INDEX_WIDTH = CGFloat(15)
 }
