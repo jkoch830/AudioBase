@@ -18,8 +18,10 @@ struct PlaylistView: View {
     @State var editMode: Bool = false
     
     func delete(with indexSet: IndexSet) {
-        indexSet.forEach { index in
-            self.newSelectedSongs.remove(at: index)
+        if self.editMode {
+            indexSet.forEach { index in
+                self.newSelectedSongs.remove(at: index)
+            }
         }
     }
     
@@ -31,10 +33,7 @@ struct PlaylistView: View {
                         .font(.largeTitle)
                     NavigationLink(destination:
                             PlaylistSongSelectionView(selectedSongs: $newSelectedSongs)) {
-                        HStack {
-                             Image(systemName: "plus.circle.fill").foregroundColor(.green)
-                         Text("Add Music").foregroundColor(self.colorHolder.selected())
-                        }
+                        Text("Add Music...").foregroundColor(self.colorHolder.selected())
                     }
                 }
                 .padding(.leading, 10)
@@ -48,45 +47,40 @@ struct PlaylistView: View {
                     .animation(.easeInOut)
             }
             List {
-                if self.editMode {
-                    ForEach(self.newSelectedSongs, id: \.self) { songTitle in
-                        PlayableSongRow(audioInfo: self.allAudioInfo[songTitle]!)
-                    }.onDelete(perform: self.delete)
-                } else {
-                    ForEach(self.playlist.songTitles, id: \.self) { songTitle in
-                        PlayableSongRow(audioInfo: self.allAudioInfo[songTitle]!)
-                    }
-                }
-                
+                ForEach(self.newSelectedSongs, id: \.self) { songTitle in
+                    PlayableSongRow(audioInfo: self.allAudioInfo[songTitle]!)
+                }.onDelete(perform: self.delete).deleteDisabled(!self.editMode)
             }
             PlayerButtons()
         }.padding(.top, Constants.NEW_PLAYLIST_TITLE_PADDING)
-        .navigationBarBackButtonHidden(self.editMode)
-        .navigationBarTitle(Text(self.playlist.playlistTitle), displayMode: .inline)
-        .navigationBarItems(
-            leading:
-            Button(action: {
-                self.newPlaylistTitle = self.playlist.playlistTitle
-                self.newSelectedSongs = self.playlist.songTitles
-                self.editMode.toggle()
-                
-            }) {
-                if self.editMode { Text("Cancel") }
-                else { EmptyView() }
-            },
-            trailing:
-            Button(self.editMode ? "Done" : "Edit") {
-                if self.editMode {
-                    let oldTitle = self.playlist.playlistTitle
-                    self.playlist.playlistTitle = self.newPlaylistTitle
-                    self.playlist.songTitles = self.newSelectedSongs
-                    self.audioFileManager.updatePlaylist(oldTitle: oldTitle,
-                                                         newTitle: self.newPlaylistTitle,
-                                                         newPlaylist: self.playlist)
+            .navigationBarBackButtonHidden(self.editMode)
+            .navigationBarTitle(Text(self.playlist.playlistTitle), displayMode: .inline)
+            .navigationBarItems(
+                leading:
+                Button(action: {
+                    self.newPlaylistTitle = self.playlist.playlistTitle
+                    self.newSelectedSongs = self.playlist.songTitles
+                    self.editMode.toggle()
+                    
+                }) {
+                    if self.editMode { Text("Cancel") }
+                    else { EmptyView() }
+                },
+                trailing:
+                Button(self.editMode ? "Done" : "Edit") {
+                    if self.editMode {
+                        let oldTitle = self.playlist.playlistTitle
+                        self.playlist.playlistTitle = self.newPlaylistTitle
+                        self.playlist.songTitles = self.newSelectedSongs
+                        self.audioFileManager.updatePlaylist(oldTitle: oldTitle,
+                                                             newTitle: self.newPlaylistTitle,
+                                                             newPlaylist: self.playlist)
+                    }
+                    self.editMode.toggle()
                 }
-                self.editMode.toggle()
-            }
-        )
+            )
+            .environment(\.editMode, .constant(self.editMode ? EditMode.active : EditMode.inactive))
+                .animation(.spring())
     }
 }
 

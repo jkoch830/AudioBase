@@ -14,6 +14,14 @@ struct NewPlaylistView: View {
     @Binding var showingNewPlaylistView: Bool
     @EnvironmentObject var audioFileManager: AudioFileManager
     @EnvironmentObject var colorHolder: ColorHolder
+    
+    func delete(with indexSet: IndexSet) {
+        indexSet.forEach { index in
+            self.selectedSongs.remove(at: index)
+        }
+        
+    }
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -28,12 +36,12 @@ struct NewPlaylistView: View {
                         PlaylistSongSelectionView(selectedSongs: $selectedSongs)) {
                        HStack {
                             Image(systemName: "plus.circle.fill").foregroundColor(.green)
-                        Text("Add Music").foregroundColor(self.colorHolder.selected())
+                            Text("Add Music").foregroundColor(self.colorHolder.selected())
                        }
                    }
                     ForEach(selectedSongs, id: \.self) { selectedSong in
                         Text(selectedSong)
-                    }
+                    }.onDelete(perform: self.delete)
                 }.onAppear {
                     UITableView.appearance().showsVerticalScrollIndicator = false
                 }

@@ -31,7 +31,7 @@ final class AudioFileManager: ObservableObject {
     
     init() {
         self.verifyJSONFileExists(url: getAudioInfoURL())
-        self.verifyJSONFileExists(url: getPlaylistURL())
+        self.verifyJSONFileExists(url: getPlaylistsURL())
         self.allAudioInfo = self.getAllAudioInfo()
         self.playlists = self.getPlaylists()
     }
@@ -90,7 +90,7 @@ extension AudioFileManager {
 // Playlist functionality
 extension AudioFileManager {
     func getPlaylists() -> [String: Playlist] {
-        let url = getPlaylistURL()
+        let url = getPlaylistsURL()
         let data = try! Data(contentsOf: url)
         let decoder = JSONDecoder()
         return try! decoder.decode([String: Playlist].self, from: data)
@@ -135,19 +135,25 @@ extension AudioFileManager {
 // Firebase methods
 extension AudioFileManager {
     /// Replaces all saved data in Firebase Storage with the current, local data
-    /// - Returns: The upload task
-    func syncLocalToStorage() -> StorageUploadTask {
+    /// - Returns: An array containing the audioInfoRef upload task followed by the playlistRef upload task
+    func syncLocalToStorage() -> [StorageUploadTask] {
+        let storage = Storage.storage()
         let audioInfoURL = getAudioInfoURL()
-        let audioInfoRef = Storage.storage().reference().child(getAudioInfoRefPath())
-        return audioInfoRef.putFile(from: audioInfoURL, metadata: nil)
+        let playlistsURL = getPlaylistsURL()
+        let audioInfoRef = storage.reference().child(getAudioInfoRefPath())
+        let playlistsRef = storage.reference().child(getPlaylistsRefPath())
+        return [audioInfoRef.putFile(from: audioInfoURL, metadata: nil),
+                playlistsRef.putFile(from: playlistsURL, metadata: nil)]
     }
 
     /// Merges the current, local data with the saved data in Firebase storage
     /// - Returns: The download task
-    func mergeLocalWithStorage() -> StorageDownloadTask {
-        let audioInfoRef = Storage.storage().reference().child(getAudioInfoRefPath())
-        return audioInfoRef.getData(maxSize: 1 * 1024 * 1024) { data, _ in
-            let decoder = JSONDecoder()
+    func mergeLocalWithStorage() -> [StorageDownloadTask] {
+        let decoder = JSONDecoder()
+        let storage = Storage.storage()
+        let audioInfoRef = storage.reference().child(getAudioInfoRefPath())
+        let playlistsRef = storage.reference().child(getPlaylistsRefPath())
+        let audioInfoDownloadTask = audioInfoRef.getData(maxSize: 1 * 1024 * 1024) { data, _ in
             let cloudData = try! decoder.decode([String: AudioInfo].self, from: data!)
             
             self.allAudioInfo.merge(cloudData) { (current, _) in current }
@@ -162,6 +168,13 @@ extension AudioFileManager {
                 
             }
         }
+        let playlistsDownloadTask = playlistsRef.getData(maxSize: 1 * 1024 * 1024) { data, _ in
+            let cloudData = try! decoder.decode([String: Playlist].self, from: data!)
+            
+            self.playlists.merge(cloudData) { (current, _) in current }
+            self.overwritePlaylistInfo(newPlaylistJSON: self.playlists)
+        }
+        return [audioInfoDownloadTask, playlistsDownloadTask]
     }
     
     private func downloadYoutubeToStorage(youtubeURL: String, title: String, artist: String) {
@@ -215,12 +228,16 @@ fileprivate extension AudioFileManager {
         return "audioInfo.json"
     }
     
+    func getPlaylistsRefPath() -> String {
+        return "playlists.json"
+    }
+    
     func overwritePlaylistInfo(newPlaylistJSON: [String: Playlist]) {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted]
         let newData: Data = try! encoder.encode(newPlaylistJSON)
         let newJSONString = String(data: newData, encoding: .utf8)!
-        try! newJSONString.write(to: getPlaylistURL(), atomically: true, encoding: .utf8)
+        try! newJSONString.write(to: getPlaylistsURL(), atomically: true, encoding: .utf8)
     }
     
     /// Overwrites the audioInfoJSON file with new daata

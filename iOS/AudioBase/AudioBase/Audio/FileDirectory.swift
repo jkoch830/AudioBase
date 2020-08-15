@@ -23,7 +23,7 @@ func getAudioInfoURL() -> URL {
     return getDocumentsDirectory().appendingPathComponent("audioFiles.json")
 }
 
-func getPlaylistURL() -> URL {
+func getPlaylistsURL() -> URL {
     return getDocumentsDirectory().appendingPathComponent("playlists.json")
 }
 

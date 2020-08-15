@@ -20,4 +20,5 @@ struct Constants {
     static let SONG_ARTIST_SIZE = CGFloat(15)
     static let SECTION_INDEX_WIDTH = CGFloat(15)
     static let NEW_PLAYLIST_TITLE_PADDING = CGFloat(20)
+    static let ADD_BUTTON_SIZE = CGFloat(22)
 }
