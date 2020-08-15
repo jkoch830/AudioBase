@@ -12,15 +12,15 @@ import FirebaseStorage
 import Alamofire
 
 struct AudioInfo: Codable, Hashable {
-    let title: String
-    let artist: String
+    var title: String
+    var artist: String
     let youtubeURL: String
 }
 
 
 struct Playlist: Codable, Hashable {
-    let playlistTitle: String
-    let songTitles: [String]
+    var playlistTitle: String
+    var songTitles: [String]
 }
 
 
@@ -41,7 +41,6 @@ extension AudioFileManager {
     
     func clearDownloads() {
         self.downloadTaskContainer.clear()
-        // self.objectWillChange.send()
     }
     
     func addAudioInfo(title: String, artist: String, youtubeURL: String) {
@@ -55,6 +54,7 @@ extension AudioFileManager {
         self.overwriteAudioInfo(newAudioInfoJSON: self.allAudioInfo)
         let filename = songNameToFilename(songName: title)
         try? FileManager.default.removeItem(at: getAudioFileURL(audioFilename: filename))
+        self.deleteSongFromAllPlaylists(songTitle: title)
     }
     
     func getAudioInfo(title: String) -> AudioInfo? {
@@ -109,6 +109,24 @@ extension AudioFileManager {
     func deletePlaylist(title: String) {
         self.playlists.removeValue(forKey: title)
         self.overwritePlaylistInfo(newPlaylistJSON: self.playlists)
+    }
+    
+    func updatePlaylist(oldTitle: String, newTitle: String, newPlaylist: Playlist) {
+        if oldTitle != newTitle {
+            self.playlists.removeValue(forKey: oldTitle)
+        }
+        self.playlists[newTitle] = newPlaylist
+        self.overwritePlaylistInfo(newPlaylistJSON: self.playlists)
+    }
+    
+    func deleteSongFromAllPlaylists(songTitle: String) {
+        let playlistsCopy = self.playlists!
+        for (playlistTitle, playlist) in playlistsCopy {
+            var newPlaylist = playlist
+            newPlaylist.songTitles.removeAll(where: { $0 == songTitle })
+            self.playlists[playlistTitle] = newPlaylist
+        }
+        overwritePlaylistInfo(newPlaylistJSON: self.playlists)
     }
     
     

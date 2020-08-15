@@ -1,15 +1,14 @@
 //
-//  PlaylistsView.swift
+//  PlaylistSongSelectionView.swift
 //  AudioBase
 //
-//  Created by James Koch on 8/3/20.
+//  Created by James Koch on 8/15/20.
 //  Copyright © 2020 James Koch. All rights reserved.
 //
 
 import SwiftUI
-import AVFoundation
 
-struct SongRow: View {
+fileprivate struct SongRow: View {
     @Binding var selectedSongs: [String]
     let audioInfo: AudioInfo
     
@@ -49,7 +48,7 @@ struct SongRow: View {
 }
 
 
-struct SongSelectionView: View {
+struct PlaylistSongSelectionView: View {
     let scrollManager = ScrollManager()
     @State var indexPathToSetVisible: IndexPath?
     @State var sortByTitle: Bool = true
@@ -127,105 +126,5 @@ struct SongSelectionView: View {
                               indexPathToSetVisible: $indexPathToSetVisible)
                 .allowsHitTesting(false).frame(width: 0, height: 0)
         }
-    }
-}
-
-struct PlaylistPageView: View {
-    @State var playlist: Playlist
-    var body: some View {
-        Text(self.playlist.playlistTitle)
-    }
-}
-
-
-struct NewPlaylistView: View {
-    @State var playlistName: String = ""
-    @State var selectedSongs: [String] = [String]()
-    @Binding var showingNewPlaylistView: Bool
-    @EnvironmentObject var audioFileManager: AudioFileManager
-    @EnvironmentObject var colorHolder: ColorHolder
-    var body: some View {
-        NavigationView {
-            VStack {
-                Section {
-                    TextField("Playlist Name", text: self.$playlistName)
-                        .multilineTextAlignment(.center)
-                        .font(.title)
-                }.padding(.top, Constants.NEW_PLAYLIST_TITLE_PADDING)
-                Divider()
-                List {
-                    NavigationLink(destination: SongSelectionView(selectedSongs: $selectedSongs)) {
-                       HStack {
-                            Image(systemName: "plus.circle.fill").foregroundColor(.green)
-                        Text("Add Music").foregroundColor(self.colorHolder.selected())
-                       }
-                   }
-                    ForEach(selectedSongs, id: \.self) { selectedSong in
-                        Text(selectedSong)
-                    }
-                }.onAppear {
-                    UITableView.appearance().showsVerticalScrollIndicator = false
-                }
-                
-            }
-            .navigationBarTitle("New Playlist", displayMode: .inline)
-            .navigationBarItems(
-                leading:
-                Button("Cancel") {
-                    self.showingNewPlaylistView = false
-                },
-                trailing:
-                Button("Done") {
-                    if self.playlistName != "" {
-                        self.audioFileManager.addPlaylist(title: self.playlistName,
-                                                          songs: self.selectedSongs)
-                    }
-                    self.showingNewPlaylistView = false
-                })
-        }
-    }
-}
-
-struct PlaylistsView: View {
-    @EnvironmentObject var audioFileManager: AudioFileManager
-    @EnvironmentObject var colorHolder: ColorHolder
-    @State var showingNewPlaylistView: Bool = false
-    
-    func delete(with indexSet: IndexSet) {
-        indexSet.forEach { index in
-            let title = self.audioFileManager.getSortedPlaylists()[index].playlistTitle
-            self.audioFileManager.deletePlaylist(title: title)
-        }
-
-    }
-    
-    var body: some View {
-        List {
-            Button(action: {
-                self.showingNewPlaylistView.toggle()
-            }) {
-                HStack {
-                    Image(systemName: "plus.circle.fill")
-                        .foregroundColor(self.colorHolder.selected())
-                    Text("New Playlist...")
-                        .foregroundColor(self.colorHolder.selected())
-                }
-            }.sheet(isPresented: self.$showingNewPlaylistView) {
-                NewPlaylistView(showingNewPlaylistView: self.$showingNewPlaylistView)
-                    .environmentObject(self.colorHolder)
-                    .environmentObject(self.audioFileManager)
-            }
-            ForEach(self.audioFileManager.getSortedPlaylists(), id: \.self) { playlist in
-                NavigationLink(destination: PlaylistPageView(playlist: playlist)) {
-                    Text(playlist.playlistTitle)
-                }
-            }.onDelete(perform: self.delete)
-        }.navigationBarTitle("Playlists")
-    }
-}
-
-struct PlaylistsView_Previews: PreviewProvider {
-    static var previews: some View {
-        PlaylistsView()
     }
 }

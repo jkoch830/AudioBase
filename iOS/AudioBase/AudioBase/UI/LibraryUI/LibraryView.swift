@@ -15,7 +15,7 @@ struct LibraryView: View {
         VStack {
             NavigationView {
                 List {
-                    NavigationLink(destination: PlaylistsView()) {
+                    NavigationLink(destination: AllPlaylistsView()) {
                         Text("Playlists")
                             .font(.system(size: 25))
                             .foregroundColor(colorHolder.selected())
