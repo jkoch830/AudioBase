@@ -31,6 +31,18 @@ class AudioPlayer: ObservableObject {
         }
     }
     
+    func startQueue(audioInfoSelection: [AudioInfo]) {
+        
+    }
+    
+    func shuffle(audioInfoSelection: [AudioInfo]) {
+        let randomAudioInfo = audioInfoSelection.randomElement()
+        if let randomAudioInfo = randomAudioInfo {
+            self.play(songName: randomAudioInfo.title)
+        }
+        
+    }
+    
     func hasCurrentAudio() -> Bool {
         return self.player != nil && self.player.url != nil
     }

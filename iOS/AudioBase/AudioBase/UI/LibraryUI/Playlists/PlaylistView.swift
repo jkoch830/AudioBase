@@ -25,6 +25,14 @@ struct PlaylistView: View {
         }
     }
     
+    func onlyPlaylistAudioInfo() -> [AudioInfo] {
+        var res = [AudioInfo]()
+        for songTitle in self.playlist.songTitles {
+            res.append(self.allAudioInfo[songTitle]!)
+        }
+        return res
+    }
+    
     var body: some View {
         VStack {
             if self.editMode {
@@ -41,7 +49,7 @@ struct PlaylistView: View {
                                         removal: .move(edge: .trailing)))
                 .animation(.easeInOut)
             } else {
-                PlayShuffleButtons()
+                PlayShuffleButtons(audioInfo: self.onlyPlaylistAudioInfo())
                     .transition(.asymmetric(insertion: .move(edge: .trailing),
                                             removal: .move(edge: .leading)))
                     .animation(.easeInOut)
@@ -51,7 +59,7 @@ struct PlaylistView: View {
                     PlayableSongRow(audioInfo: self.allAudioInfo[songTitle]!)
                 }.onDelete(perform: self.delete).deleteDisabled(!self.editMode)
             }
-            PlayerButtons()
+            PlayerButtons(audioInfo: self.onlyPlaylistAudioInfo())
         }.padding(.top, Constants.NEW_PLAYLIST_TITLE_PADDING)
             .navigationBarBackButtonHidden(self.editMode)
             .navigationBarTitle(Text(self.playlist.playlistTitle), displayMode: .inline)

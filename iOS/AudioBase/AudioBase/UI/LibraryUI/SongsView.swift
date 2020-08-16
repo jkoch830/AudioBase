@@ -9,87 +9,6 @@
 import SwiftUI
 import UIKit
 
-struct PlayButton: View {
-    @EnvironmentObject var colorHolder: ColorHolder
-    var body: some View {
-        Button(action: {
-            // Play First song and start queue
-        }) {
-            HStack {
-                Image(systemName: "play.fill").foregroundColor(colorHolder.selected())
-                Text("Play").foregroundColor(colorHolder.selected())
-            }
-            .frame(width: Constants.SONGS_BUTTONS_WIDTH, height: Constants.SONGS_BUTTONS_HEIGHT)
-            .background(Color(.systemGray6))
-            .cornerRadius(Constants.SONGS_BUTTONS_CORNER_RADIUS)
-        }
-    }
-}
-
-struct ShuffleButton: View {
-    @EnvironmentObject var colorHolder: ColorHolder
-    var body: some View {
-        Button(action: {
-            // Play random song and start queue
-        }) {
-            HStack {
-                Image(systemName: "shuffle").foregroundColor(colorHolder.selected())
-                Text("Shuffle").foregroundColor(colorHolder.selected())
-            }
-            .frame(width: Constants.SONGS_BUTTONS_WIDTH, height: Constants.SONGS_BUTTONS_HEIGHT)
-            .background(Color(.systemGray6))
-            .cornerRadius(Constants.SONGS_BUTTONS_CORNER_RADIUS)
-        }
-    }
-}
-
-/// Stack container for the Play button and Shuffle button
-struct PlayShuffleButtons: View {
-    var body: some View {
-        HStack {
-            Spacer()
-            PlayButton()
-            Spacer()
-            ShuffleButton()
-            Spacer()
-        }
-    }
-}
-
-struct PlayerButtons: View {
-    @EnvironmentObject var audioPlayer: AudioPlayer
-    @EnvironmentObject var audioFileManager: AudioFileManager
-    var body: some View {
-        HStack {
-            Button(action: {
-                if self.audioPlayer.isPlaying {
-                    self.audioPlayer.pause()
-                } else if self.audioPlayer.hasCurrentAudio() {
-                    self.audioPlayer.resume()
-                } else {
-                    let randomAudioInfo = self.audioFileManager.allAudioInfo.randomElement()
-                    if let randomAudioInfo = randomAudioInfo {
-                        self.audioPlayer.play(songName: randomAudioInfo.key)
-                    }
-                    
-                }
-                
-            }) {
-                if self.audioPlayer.isPlaying {
-                    Image(systemName: "pause.fill")
-                    .resizable()
-                    .frame(width: 20, height: Constants.SONG_ROW_HEIGHT / 3)
-                } else {
-                    Image(systemName: "play.fill")
-                    .resizable()
-                    .frame(width: 20, height: Constants.SONG_ROW_HEIGHT / 3)
-                }
-            }
-        }.frame(width: Constants.DEVICE_WIDTH, height: Constants.SONG_ROW_HEIGHT)
-            .background(Color(UIColor.systemGray6))
-    }
-}
-
 struct PlayableSongRow: View {
     let audioInfo: AudioInfo
     @EnvironmentObject var audioPlayer: AudioPlayer
@@ -212,7 +131,7 @@ struct SongsView: View {
     
     var body: some View {
         VStack {
-            PlayShuffleButtons()
+            PlayShuffleButtons(audioInfo: self.getSortedAudioInfo())
             HStack(spacing: 0) {
                 // Sort all songs by section
                 List {
@@ -237,7 +156,7 @@ struct SongsView: View {
                                  indexPathToSetVisible: self.$indexPathToSetVisible)
             }
             // Currently playing section
-            PlayerButtons()
+            PlayerButtons(audioInfo: self.getSortedAudioInfo())
             ScrollManagerView(scrollManager: self.scrollManager,
                               indexPathToSetVisible: $indexPathToSetVisible)
                 .allowsHitTesting(false).frame(width: 0, height: 0)
