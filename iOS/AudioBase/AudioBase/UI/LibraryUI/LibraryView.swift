@@ -11,31 +11,42 @@ import SwiftUI
 
 struct LibraryView: View {
     @EnvironmentObject var colorHolder: ColorHolder
+    @EnvironmentObject var audioFileManager: AudioFileManager
+    
     var body: some View {
         VStack {
             NavigationView {
                 List {
-                    NavigationLink(destination: AllPlaylistsView()) {
+                    NavigationLink(destination:
+                        AllPlaylistsView()
+                            .padding(.bottom, Constants.PLAYER_BUTTONS_ROW_HEIGHT)) {
                         Text("Playlists")
                             .font(.system(size: 25))
-                            .foregroundColor(colorHolder.selected())
+                            .foregroundColor(self.colorHolder.selected())
                             .padding(.vertical, 5)
                     }
-                    NavigationLink(destination: ArtistsView()) {
+                    NavigationLink(destination:
+                        ArtistsView()
+                            .padding(.bottom, Constants.PLAYER_BUTTONS_ROW_HEIGHT)) {
                         Text("Artists")
                             .font(.system(size: 25))
-                            .foregroundColor(colorHolder.selected())
+                            .foregroundColor(self.colorHolder.selected())
                             .padding(.vertical, 5)
                     }
-                    NavigationLink(destination: SongsView()) {
+                    NavigationLink(destination:
+                        SongsView()
+                            .padding(.bottom, Constants.PLAYER_BUTTONS_ROW_HEIGHT)) {
                         Text("Songs")
                             .font(.system(size: 25))
-                            .foregroundColor(colorHolder.selected())
+                            .foregroundColor(self.colorHolder.selected())
                             .padding(.vertical, 5)
                     }
                 }.navigationBarTitle("Library")
             }
-        }
+        }.overlay(VStack {
+            Spacer()
+            PlayerButtons(audioInfo: self.audioFileManager.getSortedAudioInfo(sortByTitle: true))
+        })
     }
 }
 

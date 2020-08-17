@@ -12,39 +12,49 @@ import AVFoundation
 //var player: AVAudioPlayer!
 
 class AudioPlayer: ObservableObject {
-    private var player: AVAudioPlayer!
+    private var player: AVQueuePlayer
     
     @Published var isPlaying: Bool = false
-    @Published var currentSong: String?
+    @Published var currentAudioInfo: AudioInfo?
+    @Published var queue: [AudioInfo] = [AudioInfo]()
+    
+    init() {
+        self.player = AVQueuePlayer()
+        self.addEndObserver()
+    }
 
-    func play(songName: String) {
-        let filename = songNameToFilename(songName: songName)
+    func play(audioInfo: AudioInfo) {
+        let filename = songNameToFilename(songName: audioInfo.title)
         let localURL = getAudioFileURL(audioFilename: filename)
-        do {
-            self.player = try AVAudioPlayer(contentsOf: localURL)
-            self.player.prepareToPlay()
-            self.player.play()
-            self.isPlaying = true
-            self.currentSong = songName
-        } catch {
-            print(error)
-        }
+        let playerItem: AVPlayerItem = AVPlayerItem(url: localURL)
+        self.player.replaceCurrentItem(with: playerItem)
+        self.player.play()
+        self.isPlaying = true
+        self.currentAudioInfo = audioInfo
     }
     
     func startQueue(audioInfoSelection: [AudioInfo]) {
-        
+        self.player.removeAllItems()
+        self.player = AVQueuePlayer(items: self.audioInfoToItem(audioInfo: audioInfoSelection))
+        self.player.play()
+        self.isPlaying = true
+        var audioInfoSelection = audioInfoSelection
+        self.currentAudioInfo = audioInfoSelection.removeFirst()
+        self.queue = audioInfoSelection
     }
     
     func shuffle(audioInfoSelection: [AudioInfo]) {
-        let randomAudioInfo = audioInfoSelection.randomElement()
-        if let randomAudioInfo = randomAudioInfo {
-            self.play(songName: randomAudioInfo.title)
-        }
-        
+        let shuffled: [AudioInfo] = audioInfoSelection.shuffled()
+        self.startQueue(audioInfoSelection: shuffled)
     }
     
     func hasCurrentAudio() -> Bool {
-        return self.player != nil && self.player.url != nil
+        return self.currentAudioInfo != nil
+    }
+    
+    func next() {
+        self.player.advanceToNextItem()
+        self.updateQueue()
     }
 
     func pause() {
@@ -56,12 +66,42 @@ class AudioPlayer: ObservableObject {
         self.player.play()
         self.isPlaying = true
     }
-
-    func stop() {
-        self.player.stop()
-        self.isPlaying = false
+    
+    func updateQueue() {
+        if self.queue.count > 0 {
+            self.currentAudioInfo = self.queue.removeFirst()
+        } else {   // Queue is complete
+            self.currentAudioInfo = nil
+            self.isPlaying = false
+        }
+        
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 }
 
+extension AudioPlayer {
+    private func addEndObserver() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(playerItemDidReachEnd),
+                                               name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
+                                               object: nil) // Add observer
+    }
+    
+    // Notification Handling
+    @objc func playerItemDidReachEnd(notification: NSNotification) {
+        self.updateQueue()
+    }
+    
+    private func audioInfoToItem(audioInfo: [AudioInfo]) -> [AVPlayerItem] {
+        return audioInfo.map { audioInfo in
+            let filename = songNameToFilename(songName: audioInfo.title)
+            let localURL = getAudioFileURL(audioFilename: filename)
+            return AVPlayerItem(url: localURL)
+        }
+    }
+}
 
 

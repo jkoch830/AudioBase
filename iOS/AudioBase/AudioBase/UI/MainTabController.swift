@@ -35,7 +35,13 @@ struct MainTabController: View {
                     Image(systemName: "gear")
                     Text("Settings")
             }
-        }.accentColor(colorHolder.selected())
+        }
+//        .overlay(VStack {
+//            Spacer()
+//            PlayerButtons(audioInfo: self.audioFileManager.getSortedAudioInfo(sortByTitle: true))
+//                .padding(.bottom, Constants.TAB_BAR_HEIGHT)
+//        })
+        .accentColor(self.colorHolder.selected())
     }
 }
 

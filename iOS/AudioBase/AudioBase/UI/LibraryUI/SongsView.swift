@@ -14,7 +14,7 @@ struct PlayableSongRow: View {
     @EnvironmentObject var audioPlayer: AudioPlayer
     var body: some View {
         Button(action: {
-            self.audioPlayer.play(songName: self.audioInfo.title)
+            self.audioPlayer.play(audioInfo: self.audioInfo)
         }) {
             VStack (alignment: .leading, spacing: 5) {
                 Text(self.audioInfo.title)
@@ -154,13 +154,12 @@ struct SongsView: View {
                 SectionShortcuts(sortedSections: self.getSortedSections(),
                                  sectionIndices: self.getAllSectionIndices(),
                                  indexPathToSetVisible: self.$indexPathToSetVisible)
+                ScrollManagerView(scrollManager: self.scrollManager,
+                                    indexPathToSetVisible: $indexPathToSetVisible)
+                      .allowsHitTesting(false).frame(width: 0, height: 0)
             }
-            // Currently playing section
-            PlayerButtons(audioInfo: self.getSortedAudioInfo())
-            ScrollManagerView(scrollManager: self.scrollManager,
-                              indexPathToSetVisible: $indexPathToSetVisible)
-                .allowsHitTesting(false).frame(width: 0, height: 0)
-        }
+        }  
     }
+    
 }
 

@@ -60,11 +60,15 @@ struct PlayShuffleButtons: View {
     }
 }
 
+
 struct PlayerButtons: View {
     @EnvironmentObject var audioPlayer: AudioPlayer
+    @State var showingQueue: Bool = false
     let audioInfo: [AudioInfo]
-    var body: some View {
-        HStack {
+    
+    var playerButtons: some View {
+        HStack(spacing: Constants.PLAYER_BUTTONS_PADDING) {
+            // Play/pause button
             Button(action: {
                 if self.audioPlayer.isPlaying {
                     self.audioPlayer.pause()
@@ -75,17 +79,46 @@ struct PlayerButtons: View {
                 }
                 
             }) {
-                if self.audioPlayer.isPlaying {
-                    Image(systemName: "pause.fill")
+                Image(systemName: self.audioPlayer.isPlaying ? "pause.fill" : "play.fill")
                     .resizable()
-                    .frame(width: 20, height: Constants.SONG_ROW_HEIGHT / 3)
-                } else {
-                    Image(systemName: "play.fill")
-                    .resizable()
-                    .frame(width: 20, height: Constants.SONG_ROW_HEIGHT / 3)
-                }
+                    .frame(width: Constants.PLAY_BUTTON_WIDTH,
+                           height: Constants.SONG_ROW_HEIGHT / 3)
             }
-        }.frame(width: Constants.DEVICE_WIDTH, height: Constants.SONG_ROW_HEIGHT)
-            .background(Color(UIColor.systemGray6))
+            // Next button
+            Button(action: {
+                self.audioPlayer.next()
+            }) {
+                Image(systemName: "forward.fill")
+                .resizable()
+                    .frame(width: Constants.FORWARD_BUTTON_WIDTH,
+                           height: Constants.SONG_ROW_HEIGHT / 3)
+            }
+        }
+    }
+    
+    var overlayView: some View {
+        HStack {
+            Text(self.audioPlayer.currentAudioInfo == nil ? "Not Playing" :
+                 self.audioPlayer.currentAudioInfo!.title)
+                .padding(.leading, Constants.PLAYER_BUTTONS_PADDING)
+            Spacer()
+            self.playerButtons
+                .padding(.trailing, Constants.PLAYER_BUTTONS_PADDING)
+        }
+    }
+    
+    var body: some View {
+        Button(action: {
+            self.showingQueue.toggle()
+        }) {
+            Color(UIColor.systemGray6)
+                .frame(width: Constants.DEVICE_WIDTH, height: Constants.PLAYER_BUTTONS_ROW_HEIGHT)
+        }
+        .sheet(isPresented: self.$showingQueue) {
+            List(self.audioPlayer.queue, id: \.self.title) { audioInfo in
+                Text(audioInfo.title)
+            }
+        }
+        .overlay(self.overlayView)
     }
 }

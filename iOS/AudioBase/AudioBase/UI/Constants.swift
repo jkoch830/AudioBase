@@ -21,4 +21,8 @@ struct Constants {
     static let SECTION_INDEX_WIDTH = CGFloat(15)
     static let NEW_PLAYLIST_TITLE_PADDING = CGFloat(20)
     static let ADD_BUTTON_SIZE = CGFloat(22)
+    static let PLAY_BUTTON_WIDTH = CGFloat(20)
+    static let FORWARD_BUTTON_WIDTH = CGFloat(40)
+    static let PLAYER_BUTTONS_ROW_HEIGHT = Constants.DEVICE_HEIGHT / 10
+    static let PLAYER_BUTTONS_PADDING = CGFloat(20)
 }

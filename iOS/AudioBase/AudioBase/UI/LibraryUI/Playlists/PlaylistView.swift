@@ -59,7 +59,6 @@ struct PlaylistView: View {
                     PlayableSongRow(audioInfo: self.allAudioInfo[songTitle]!)
                 }.onDelete(perform: self.delete).deleteDisabled(!self.editMode)
             }
-            PlayerButtons(audioInfo: self.onlyPlaylistAudioInfo())
         }.padding(.top, Constants.NEW_PLAYLIST_TITLE_PADDING)
             .navigationBarBackButtonHidden(self.editMode)
             .navigationBarTitle(Text(self.playlist.playlistTitle), displayMode: .inline)
