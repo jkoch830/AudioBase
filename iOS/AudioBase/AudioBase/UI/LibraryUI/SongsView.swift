@@ -11,9 +11,11 @@ import UIKit
 
 struct PlayableSongRow: View {
     let audioInfo: AudioInfo
+    @State var pushed: Bool = false
+    @State var showContext = false
     @EnvironmentObject var audioPlayer: AudioPlayer
     @EnvironmentObject var audioFileManager: AudioFileManager
-    
+
     var body: some View {
         Button(action: {
             self.audioPlayer.playSingle(audioInfo: self.audioInfo)
@@ -26,30 +28,38 @@ struct PlayableSongRow: View {
                 Text(self.audioInfo.artist)
                     .font(.system(size: Constants.SONG_ARTIST_SIZE))
                     .foregroundColor(Color.gray)
-            }
-        }.contextMenu {
-            Button(action: {
-                
-            }) {
-                HStack {
-                    Text("Play Next")
-                    Image(systemName: "text.insert")
+            }.contextMenu {
+                Button(action: {
+
+                }) {
+                    HStack {
+                        Text("Play Next")
+                        Image(systemName: "text.insert")
+                    }
                 }
-            }
-            Button(action: {
-                
-            }) {
-                HStack {
-                    Text("Play Later")
-                    Image(systemName: "text.append")
+                Button(action: {
+
+                }) {
+                    HStack {
+                        Text("Play Later")
+                        Image(systemName: "text.append")
+                    }
                 }
-            }
-            Button(action: {
-                self.audioFileManager.deleteAudioInfo(title: self.audioInfo.title)
-            }) {
-                HStack {
-                    Text("Delete from Library")
-                    Image(systemName: "trash")
+                Button(action: {
+                    self.audioFileManager.deleteAudioInfo(title: self.audioInfo.title)
+                }) {
+                    HStack {
+                        Text("Edit")
+                        Image(systemName: "trash")
+                    }
+                }
+                Button(action: {
+                    self.audioFileManager.deleteAudioInfo(title: self.audioInfo.title)
+                }) {
+                    HStack {
+                        Text("Delete from Library")
+                        Image(systemName: "trash")
+                    }
                 }
             }
         }
