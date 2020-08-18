@@ -52,7 +52,7 @@ struct NewPlaylistView: View {
                 leading:
                 Button("Cancel") {
                     self.showingNewPlaylistView = false
-                },
+                }.foregroundColor(self.colorHolder.selected()),
                 trailing:
                 Button("Done") {
                     if self.playlistName != "" {
@@ -60,7 +60,7 @@ struct NewPlaylistView: View {
                                                           songs: self.selectedSongs)
                     }
                     self.showingNewPlaylistView = false
-                })
+                }.foregroundColor(self.colorHolder.selected()))
         }
     }
 }

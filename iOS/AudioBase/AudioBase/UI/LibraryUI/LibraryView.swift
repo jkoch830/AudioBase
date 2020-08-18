@@ -45,7 +45,7 @@ struct LibraryView: View {
             }
         }.overlay(VStack {
             Spacer()
-            PlayerButtons(audioInfo: self.audioFileManager.getSortedAudioInfo(sortByTitle: true))
+            PlayerButtons()
         })
     }
 }

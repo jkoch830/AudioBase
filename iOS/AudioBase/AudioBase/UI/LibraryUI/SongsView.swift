@@ -12,9 +12,11 @@ import UIKit
 struct PlayableSongRow: View {
     let audioInfo: AudioInfo
     @EnvironmentObject var audioPlayer: AudioPlayer
+    @EnvironmentObject var audioFileManager: AudioFileManager
+    
     var body: some View {
         Button(action: {
-            self.audioPlayer.play(audioInfo: self.audioInfo)
+            self.audioPlayer.playSingle(audioInfo: self.audioInfo)
         }) {
             VStack (alignment: .leading, spacing: 5) {
                 Text(self.audioInfo.title)
@@ -24,6 +26,31 @@ struct PlayableSongRow: View {
                 Text(self.audioInfo.artist)
                     .font(.system(size: Constants.SONG_ARTIST_SIZE))
                     .foregroundColor(Color.gray)
+            }
+        }.contextMenu {
+            Button(action: {
+                
+            }) {
+                HStack {
+                    Text("Play Next")
+                    Image(systemName: "text.insert")
+                }
+            }
+            Button(action: {
+                
+            }) {
+                HStack {
+                    Text("Play Later")
+                    Image(systemName: "text.append")
+                }
+            }
+            Button(action: {
+                self.audioFileManager.deleteAudioInfo(title: self.audioInfo.title)
+            }) {
+                HStack {
+                    Text("Delete from Library")
+                    Image(systemName: "trash")
+                }
             }
         }
     }
@@ -121,13 +148,6 @@ struct SongsView: View {
         }
         return res
     }
-
-    func delete(with indexSet: IndexSet) {
-        indexSet.forEach { index in
-            let title = self.getSortedAudioInfo()[index].title
-            self.audioFileManager.deleteAudioInfo(title: title)
-        }
-    }
     
     var body: some View {
         VStack {
@@ -141,11 +161,22 @@ struct SongsView: View {
                             ForEach(self.getSectionalAudioInfo()[char]!, id: \.self.title) { info in
                                 PlayableSongRow(audioInfo: info)
                                     .overlay(self.tableViewFinderOverlay.frame(width: 0, height: 0))
-                            }.onDelete(perform: self.delete)
+                            }
                         }
                     }
                 }
                 .navigationBarTitle("Songs")
+                .navigationBarItems(trailing:
+                    Text("Sort").foregroundColor(self.colorHolder.selected())
+                        .contextMenu {
+                            Button("Artist") {
+                                self.sortByTitle = false
+                            }.foregroundColor(self.colorHolder.selected())
+                            Button("Title") {
+                                self.sortByTitle = true
+                            }.foregroundColor(self.colorHolder.selected())
+                    }
+                )
                 .onAppear {
                     UITableView.appearance().showsVerticalScrollIndicator = false
                 }

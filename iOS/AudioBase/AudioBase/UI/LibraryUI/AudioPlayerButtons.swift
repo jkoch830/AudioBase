@@ -8,6 +8,19 @@
 
 import SwiftUI
 
+func playAction(audioPlayer: AudioPlayer, audioFileManager: AudioFileManager) {
+    if audioPlayer.isPlaying {
+        audioPlayer.pause()
+    } else if audioPlayer.hasCurrentAudio() {
+        audioPlayer.resume()
+    } else if audioPlayer.finishedQueue() {
+        audioPlayer.restartQueue()
+    } else {
+        audioPlayer.shuffle(audioInfoSelection:
+            audioFileManager.getSortedAudioInfo(sortByTitle: true))
+    }
+}
+
 struct PlayButton: View {
     @EnvironmentObject var colorHolder: ColorHolder
     @EnvironmentObject var audioPlayer: AudioPlayer
@@ -63,26 +76,19 @@ struct PlayShuffleButtons: View {
 
 struct PlayerButtons: View {
     @EnvironmentObject var audioPlayer: AudioPlayer
+    @EnvironmentObject var audioFileManager: AudioFileManager
     @State var showingQueue: Bool = false
-    let audioInfo: [AudioInfo]
     
     var playerButtons: some View {
         HStack(spacing: Constants.PLAYER_BUTTONS_PADDING) {
             // Play/pause button
             Button(action: {
-                if self.audioPlayer.isPlaying {
-                    self.audioPlayer.pause()
-                } else if self.audioPlayer.hasCurrentAudio() {
-                    self.audioPlayer.resume()
-                } else {
-                    self.audioPlayer.shuffle(audioInfoSelection: self.audioInfo)
-                }
-                
+                playAction(audioPlayer: self.audioPlayer, audioFileManager: self.audioFileManager)
             }) {
                 Image(systemName: self.audioPlayer.isPlaying ? "pause.fill" : "play.fill")
                     .resizable()
                     .frame(width: Constants.PLAY_BUTTON_WIDTH,
-                           height: Constants.SONG_ROW_HEIGHT / 3)
+                           height: Constants.PLAYER_BUTTONS_HEIGHT)
             }
             // Next button
             Button(action: {
@@ -91,7 +97,7 @@ struct PlayerButtons: View {
                 Image(systemName: "forward.fill")
                 .resizable()
                     .frame(width: Constants.FORWARD_BUTTON_WIDTH,
-                           height: Constants.SONG_ROW_HEIGHT / 3)
+                           height: Constants.PLAYER_BUTTONS_HEIGHT)
             }
         }
     }
@@ -115,9 +121,9 @@ struct PlayerButtons: View {
                 .frame(width: Constants.DEVICE_WIDTH, height: Constants.PLAYER_BUTTONS_ROW_HEIGHT)
         }
         .sheet(isPresented: self.$showingQueue) {
-            List(self.audioPlayer.queue, id: \.self.title) { audioInfo in
-                Text(audioInfo.title)
-            }
+            QueueView()
+                .environmentObject(self.audioPlayer)
+                .environmentObject(self.audioFileManager)
         }
         .overlay(self.overlayView)
     }
